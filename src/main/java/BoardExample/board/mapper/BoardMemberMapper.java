@@ -11,4 +11,6 @@ public interface BoardMemberMapper {
     //id로 회원 조회
     BoardMember getById(String username);
 
+    //회원가입
+    void joinMember(BoardMember member);
 }

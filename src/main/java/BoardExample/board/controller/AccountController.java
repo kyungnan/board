@@ -44,4 +44,14 @@ public class AccountController {
         return "redirect:/";
     }
 
+    @GetMapping("/join")
+    public String joinForm() {
+        return "/account/join";
+    }
+
+    @PostMapping("/join")
+    public String join(BoardMember member){
+        boardMemberMapper.joinMember(member);
+        return "redirect:/";
+    }
 }

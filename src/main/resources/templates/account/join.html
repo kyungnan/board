@@ -1,0 +1,47 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<div th:insert="header.html" id="header"></div>
+
+<h1>회원가입</h1>
+<!-- 회원가입 입력 폼 -->
+<form name="joinForm" th:action="@{/account/join}" method="post">
+    <table>
+        <tr>
+            <td>ID</td>
+            <td><input type="text" name="username" placeholder="ID를 입력하세요." required="required"></td>
+        </tr>
+
+        <tr>
+            <td>Password</td>
+            <td><input type="password" name="password" placeholder="비밀번호를 입력하세요." required="required"></td>
+        </tr>
+
+        <tr>
+            <td>name</td>
+            <td><input type="text" name="name" placeholder="이름을 입력하세요." required="required"></td>
+        </tr>
+
+        <tr>
+            <td>Email</td>
+            <td><input type="text" name="email" placeholder="이메일을 입력하세요." required="required"></td>
+        </tr>
+
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="회원가입">
+                <input type="reset" value="다시작성">
+                <input type="button" value="로그인화면" th:onclick="location.href='/account/login'">
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+
+</html>
