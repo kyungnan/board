@@ -1,0 +1,43 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+
+<div th:insert="header.html" id="header"></div>
+
+<form th:action="@{'/board/modify/' + ${findPost.postno}}" method="post">
+    <table>
+        <tr>
+            <td>제목</td>
+            <td><input type="text" name="subject" size="50" maxlength="50" th:value="${findPost.subject}"></td>
+        </tr>
+        <tr>
+            <td>작성자: <div th:value="${findPost.writer}"></div></td>
+            <td>작성일: <div th:value="${#calendars.format(findPost.regdate, 'yyyy-MM-dd HH:mm')}"></div></td>
+            <td>조회수: <div th:value="${findPost.count}"></div></td>
+        </tr>
+        <tr>
+            <td>내용</td>
+            <td><textarea name="content" rows="20" cols="50">[[${findPost.content}]]</textarea></td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="수정하기">
+                <input type="reset" value="다시쓰기">
+                <input type="button" value="목록가기" th:onclick="|location.href='@{/board/list}'|">
+            </td>
+        </tr>
+    </table>
+</form>
+
+
+
+<div th:insert="footer.html" id="footer"></div>
+
+</body>
+</html>
