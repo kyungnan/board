@@ -11,7 +11,7 @@
 
     <table>
         <tr>
-            <td><input type="button" value="글쓰기" th:onclick="location.href='/board/post'"></td>
+            <td th:if="${session.member != null}"><input type="button" value="글쓰기" th:onclick="location.href='/board/post'"></td>
         </tr>
     </table>
 
