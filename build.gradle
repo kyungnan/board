@@ -12,6 +12,10 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
 }
 
 repositories {
@@ -28,6 +32,9 @@ dependencies {
 
 	// bootstrap
 	implementation group: 'org.webjars', name: 'bootstrap', version: '5.1.0'
+
+	// devtools
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
