@@ -40,7 +40,7 @@
                 </li>
 
                 <li class="nav-item" th:if="${session.member != null}">
-                    <a class="nav-link" href="#">로그아웃</a>
+                    <a class="nav-link" th:href="@{/account/logout}">로그아웃</a>
                 </li>
             </ul>
         </div>
