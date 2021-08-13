@@ -1,0 +1,40 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+
+    <div th:insert="header.html" id="header"></div>
+
+    <table>
+        <tr>
+            <td><div th:text="${findPost.subject}"></div></td>
+        </tr>
+
+        <tr>
+            <td>작성자: <div th:text="${findPost.writer}"></div></td>
+            <td>작성일: <div th:text="${#calendars.format(findPost.regdate, 'yyyy-MM-dd HH:mm')}"></div></td>
+            <td>조회수: <div th:text="${findPost.count}"></div></td>
+        </tr>
+
+        <tr>
+            <td>
+                <div th:text="${findPost.content}"></div>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <input type="button" value="목록가기" th:onclick="|location.href='@{/board/list}'|">
+            </td>
+        </tr>
+    </table>
+
+    <div th:insert="footer.html" id="footer"></div>
+
+</body>
+</html>

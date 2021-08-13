@@ -14,4 +14,10 @@
         from board
     </select>
 
+    <!-- 게시글 상세보기 -->
+    <select id="getByPostNo" resultType="BoardExample.board.domain.Board">
+        select *
+        from board
+        where postno=#{postno}
+    </select>
 </mapper>

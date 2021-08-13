@@ -14,4 +14,7 @@ public interface BoardMapper {
 
     //게시글 조회
     List<Board> getList();
+
+    // 게시글 상세보기
+    Board getByPostNo(int postNo);
 }

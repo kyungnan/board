@@ -6,9 +6,7 @@ import BoardExample.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -44,5 +42,12 @@ public class BoardController {
     public String post(String subject, String content, HttpSession session){
         boardService.createPost(subject, content, session);
         return "redirect:/board/list";       //redirect:/ 없이 board/list 하면 글 쓰기 후 리스트 보여줄때 제대로 반영 X
+    }
+
+    @GetMapping("/content/{postno}")
+    public String content(@PathVariable("postno") int postno, Model model){
+        Board findPost = boardMapper.getByPostNo(postno);
+        model.addAttribute("findPost", findPost);
+        return "board/content";
     }
 }
