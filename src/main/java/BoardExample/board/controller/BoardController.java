@@ -50,4 +50,18 @@ public class BoardController {
         model.addAttribute("findPost", findPost);
         return "board/content";
     }
+
+    @GetMapping("/modify/{postno}")
+    public String modifyForm(@PathVariable("postno") int postno, Model model){
+        Board findPost = boardMapper.getByPostNo(postno);
+        model.addAttribute("findPost",findPost);
+        return "board/modify";
+    }
+
+    @PostMapping("/modify/{postno}")
+    public String modify(@PathVariable("postno") int postno, Board updatePost){
+        Board post = boardMapper.getByPostNo(postno);
+        boardService.updatePost(post, updatePost);
+        return "redirect:/board/list";
+    }
 }

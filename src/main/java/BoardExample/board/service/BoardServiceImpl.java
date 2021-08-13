@@ -11,9 +11,10 @@ import java.sql.Timestamp;
 
 @Service
 public class BoardServiceImpl implements BoardService{
-    @Autowired
+
     private BoardMapper boardMapper;
 
+    @Autowired
     public BoardServiceImpl(BoardMapper boardMapper) {
         this.boardMapper = boardMapper;
     }
@@ -28,5 +29,12 @@ public class BoardServiceImpl implements BoardService{
         post.setSubject(subject);
         post.setContent(content);
         boardMapper.createPost(post);
+    }
+
+    @Override
+    public void updatePost(Board post, Board updatePost) {
+        post.setContent(updatePost.getContent());
+        post.setSubject(updatePost.getSubject());
+        boardMapper.updatePost(updatePost);
     }
 }

@@ -7,4 +7,6 @@ import javax.servlet.http.HttpSession;
 public interface BoardService {
 
     void createPost(String subject, String content, HttpSession session);
+
+    void updatePost(Board post, Board updatePost);
 }

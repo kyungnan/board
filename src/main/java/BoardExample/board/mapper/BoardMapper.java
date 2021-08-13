@@ -17,4 +17,7 @@ public interface BoardMapper {
 
     // 게시글 상세보기
     Board getByPostNo(int postNo);
+
+    // 게시글 수정
+    void updatePost(Board post);
 }

@@ -30,6 +30,8 @@
         <tr>
             <td>
                 <input type="button" value="목록가기" th:onclick="|location.href='@{/board/list}'|">
+                <button type="button"><a th:href="@{|/board/modify/${findPost.postno}|}"><span>수정</span></a></button>
+                <input type="button" value="삭제" th:onclick="|location.href='@{/board/remove}'|">
             </td>
         </tr>
     </table>

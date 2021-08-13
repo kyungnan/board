@@ -20,4 +20,13 @@
         from board
         where postno=#{postno}
     </select>
+
+    <!-- 게시글 수정 -->
+    <update id="updatePost" parameterType="BoardExample.board.domain.Board">
+        update board
+        set subject=#{subject},
+            content=#{content},
+            modidate=NOW()
+        where postno=#{postno}
+    </update>
 </mapper>
