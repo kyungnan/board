@@ -8,4 +8,10 @@
         values(#{subject},#{content},#{writer},#{regdate},#{modidate},#{count})
     </insert>
 
+    <!-- 게시글 조회 -->
+    <select id="getList" resultType="BoardExample.board.domain.Board">
+        select *
+        from board
+    </select>
+
 </mapper>

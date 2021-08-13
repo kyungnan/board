@@ -12,6 +12,10 @@ CREATE TABLE board(
 	count INT DEFAULT 0
 );
 
+--board 테이블 필드 자료형 변경
+ALTER TABLE board CHANGE regdate regdate datetime;
+ALTER TABLE board CHANGE modidate modidate datetime;
+
 --board_member 테이블 생성
 CREATE TABLE `board_member` (
 	`id` BIGINT NOT NULL AUTO_INCREMENT,

@@ -16,12 +16,20 @@
     </table>
 
     <table border="1">
-        <tr>
-            <th>번호</th>
-            <th>제목</th>
-            <th>작성자</th>
-            <th>작성일</th>
-            <th>조회수</th>
+        <tr border="1">
+            <th border="1">번호</th>
+            <th border="1">제목</th>
+            <th border="1">작성자</th>
+            <th border="1">작성일</th>
+            <th border="1">조회수</th>
+        </tr>
+
+        <tr th:each="post : ${boardList}" border="1">
+            <td border="1"><span th:text="${post.postno}"></span></td>
+            <td border="1"><span th:text="${post.subject}"></span></td>
+            <td border="1"><span th:text="${post.writer}"></span></td>
+            <td border="1"><span th:text="${post.regdate}"></span></td>
+            <td border="1"><span th:text="${post.count}"></span></td>
         </tr>
     </table>
 
