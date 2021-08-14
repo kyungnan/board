@@ -20,4 +20,7 @@ public interface BoardMapper {
 
     // 게시글 수정
     void updatePost(Board post);
+
+    // 게시글 삭제
+    void deletePost(int postNo);
 }

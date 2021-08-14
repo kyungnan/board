@@ -64,4 +64,10 @@ public class BoardController {
         boardService.updatePost(post, updatePost);
         return "redirect:/board/list";
     }
+
+    @GetMapping("/remove/{postno}")
+    public String modify(@PathVariable("postno") int postno){
+        boardMapper.deletePost(postno);
+        return "redirect:/board/list";
+    }
 }

@@ -29,4 +29,11 @@
             modidate=NOW()
         where postno=#{postno}
     </update>
+
+    <!-- 게시글 삭제 -->
+    <delete id="deletePost">
+        delete
+        from board
+        where postno = #{postno}
+    </delete>
 </mapper>

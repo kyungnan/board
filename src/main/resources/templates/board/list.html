@@ -26,7 +26,7 @@
 
         <tr th:each="post : ${boardList}" border="1">
             <td border="1"><span th:text="${post.postno}"></span></td>
-            <td border="1"><a th:href="@{'/board/content/' + ${post.postno}}"><span th:text="${post.subject}"></span></a></td>
+            <td border="1"><a th:href="@{'/board/content/' + ${post.postno}}"><span th:text="${post.subject}" th:onclick="${post.count++}"></span></a></td>
             <td border="1"><span th:text="${post.writer}"></span></td>
             <td border="1"><span th:text="${#calendars.format(post.regdate, 'yyyy-MM-dd HH:mm')}"></span></td>
             <td border="1"><span th:text="${post.count}"></span></td>
