@@ -47,6 +47,7 @@ public class BoardController {
     @GetMapping("/content/{postno}")
     public String content(@PathVariable("postno") int postno, Model model){
         Board findPost = boardMapper.getByPostNo(postno);
+        boardMapper.updateCount(postno);
         model.addAttribute("findPost", findPost);
         return "board/content";
     }

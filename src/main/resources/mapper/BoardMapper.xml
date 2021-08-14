@@ -21,6 +21,13 @@
         where postno=#{postno}
     </select>
 
+    <!-- 게시판 조회수 -->
+    <update id="updateCount">
+        update board
+        set count = count + 1
+        where postno=#{postno}
+    </update>
+
     <!-- 게시글 수정 -->
     <update id="updatePost" parameterType="BoardExample.board.domain.Board">
         update board
