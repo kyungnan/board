@@ -8,6 +8,24 @@
         values(#{subject},#{content},#{writer},#{regdate},#{modidate},#{count})
     </insert>
 
+    <!-- 페이징 처리 -->
+    <select id="getListWithPaging" resultType="BoardExample.board.domain.Board">
+        select orderd_board.*
+        FROM(
+            SELECT *
+            FROM board
+            order by postno
+        ) as orderd_board
+        ORDER BY postno desc
+        LIMIT #{startIndex}, #{cntPerPage}
+    </select>
+
+    <!-- 총 게시글 수 조회 -->
+    <select id="getTotalCnt" resultType="java.lang.Integer">
+        select count(*)
+        from board
+    </select>
+
     <!-- 게시글 조회 -->
     <select id="getList" resultType="BoardExample.board.domain.Board">
         select *
@@ -24,7 +42,8 @@
     <!-- 게시판 조회수 -->
     <update id="updateCount">
         update board
-        set count = count + 1
+        set count = count
+        + 1
         where postno=#{postno}
     </update>
 

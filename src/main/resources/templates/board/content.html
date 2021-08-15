@@ -29,9 +29,9 @@
 
         <tr>
             <td>
-                <input type="button" value="목록가기" th:onclick="|location.href='@{/board/list}'|">
-                <button type="button"><a th:href="@{|/board/modify/${findPost.postno}|}"><span>수정</span></a></button>
-                <button type="button"><a th:href="@{|/board/remove/${findPost.postno}|}"><span>삭제</span></a></button>
+                <button type="button"><a th:href="@{|/board/list?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>목록가기</span></a></button>
+                <button type="button"><a th:href="@{|/board/modify/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>수정</span></a></button>
+                <button type="button"><a th:href="@{|/board/remove/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>삭제</span></a></button>
             </td>
         </tr>
     </table>

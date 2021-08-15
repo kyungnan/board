@@ -26,12 +26,29 @@
 
         <tr th:each="post : ${boardList}" border="1">
             <td border="1"><span th:text="${post.postno}"></span></td>
-            <td border="1"><a th:href="@{'/board/content/' + ${post.postno}}"><span th:text="${post.subject}" th:onclick="${post.count++}"></span></a></td>
+            <td border="1"><a th:href="@{|/board/content/${post.postno}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}"><span th:text="${post.subject}" th:onclick="${post.count++}"></span></a></td>
             <td border="1"><span th:text="${post.writer}"></span></td>
             <td border="1"><span th:text="${#calendars.format(post.regdate, 'yyyy-MM-dd HH:mm')}"></span></td>
             <td border="1"><span th:text="${post.count}"></span></td>
         </tr>
     </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item" th:if="${pageMaker.prev} == true">
+                <a class="page-link"
+                   th:href="@{/board/list(page=${pageMaker.startPage}-1, cntPerPage=${pageMaker.criteria.cntPerPage})}">
+                    Previous</a>
+            </li>
+
+            <li class="page-item" th:each="idx,iterStat : ${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}" th:classappend="${pageMaker.criteria.page} == ${idx} ? active : null">
+                <a class="page-link" th:href="@{/board/list(page=${idx},cntPerPage=${pageMaker.criteria.cntPerPage})}" th:text="${idx}">1</a></li>
+
+            <li class="page-item" th:if="${pageMaker.next} == true and ${pageMaker.endPage > 0}">
+                <a class="page-link" th:href="@{/board/list(page=${pageMaker.endPage}+1,cntPerPage=${pageMaker.criteria.cntPerPage})}">
+                    Next</a></li>
+        </ul>
+    </nav>
 
     <div th:insert="footer.html" id="footer"></div>
 </body>

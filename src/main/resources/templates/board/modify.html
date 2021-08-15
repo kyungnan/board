@@ -10,7 +10,7 @@
 
 <div th:insert="header.html" id="header"></div>
 
-<form th:action="@{'/board/modify/' + ${findPost.postno}}" method="post">
+<form th:action="@{|/board/modify/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}" method="post">
     <table>
         <tr>
             <td>제목</td>
