@@ -4,37 +4,43 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
 </head>
 
 <body>
 
     <div th:insert="header.html" id="header"></div>
 
-    <table>
-        <tr>
-            <td><div th:text="${findPost.subject}"></div></td>
-        </tr>
+    <div id="container">
+        <table class="table table-bordered border-primary">
+            <tr>
+                <td colspan="3"><div th:text="${findPost.subject}"></div></td>
+            </tr>
 
-        <tr>
-            <td>작성자: <div th:text="${findPost.writer}"></div></td>
-            <td>작성일: <div th:text="${#calendars.format(findPost.regdate, 'yyyy-MM-dd HH:mm')}"></div></td>
-            <td>조회수: <div th:text="${findPost.count}"></div></td>
-        </tr>
+            <tr>
+                <td>작성자: <span th:text="${findPost.writer}"></span></td>
+                <td>작성일: <span th:text="${#calendars.format(findPost.regdate, 'yyyy-MM-dd HH:mm')}"></span></td>
+                <td>조회수: <span th:text="${findPost.count}"></span></td>
+            </tr>
 
-        <tr>
-            <td>
-                <div th:text="${findPost.content}"></div>
-            </td>
-        </tr>
+            <tr>
+                <td colspan="3">
+                    <pre><div th:text="${findPost.content}"></div></pre>
+                </td>
+            </tr>
 
-        <tr>
-            <td>
-                <button type="button"><a th:href="@{|/board/list?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>목록가기</span></a></button>
-                <button type="button"><a th:href="@{|/board/modify/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>수정</span></a></button>
-                <button type="button"><a th:href="@{|/board/remove/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>삭제</span></a></button>
-            </td>
-        </tr>
-    </table>
+            <tr>
+                <td colspan="3">
+                    <button type="button" class="btn btn-outline-dark"><a th:href="@{|/board/list?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>목록가기</span></a></button>
+                    <span th:if="${session.member.getName().equals(findPost.writer)}">
+                        <button type="button" class="btn btn-outline-dark"><a th:href="@{|/board/modify/${findPost.postno}?&page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>수정</span></a></button>
+                        <button type="button" class="btn btn-outline-dark"><a th:href="@{|/board/remove/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>삭제</span></a></button>
+                    </span>
+
+                </td>
+            </tr>
+        </table>
+    </div>
 
     <div th:insert="footer.html" id="footer"></div>
 

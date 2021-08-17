@@ -9,6 +9,13 @@
         where username = #{username}
     </select>
 
+    <!-- ID 중복체크 -->
+    <select id="idChk" resultType="int">
+        select count(*)
+        from board_member
+        where username=#{username}
+    </select>
+
     <!-- 회원가입 -->
     <insert id="joinMember">
         insert into board_member(username, password, name, email)

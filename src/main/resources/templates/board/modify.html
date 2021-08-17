@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <title>Title</title>
 </head>
 
@@ -10,32 +11,25 @@
 
 <div th:insert="header.html" id="header"></div>
 
-<form th:action="@{|/board/modify/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}" method="post">
-    <table>
-        <tr>
-            <td>제목</td>
-            <td><input type="text" name="subject" size="50" maxlength="50" th:value="${findPost.subject}"></td>
-        </tr>
-        <tr>
-            <td>작성자: <div th:value="${findPost.writer}"></div></td>
-            <td>작성일: <div th:value="${#calendars.format(findPost.regdate, 'yyyy-MM-dd HH:mm')}"></div></td>
-            <td>조회수: <div th:value="${findPost.count}"></div></td>
-        </tr>
-        <tr>
-            <td>내용</td>
-            <td><textarea name="content" rows="20" cols="50">[[${findPost.content}]]</textarea></td>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" value="수정하기">
-                <input type="reset" value="다시쓰기">
-                <input type="button" value="목록가기" th:onclick="|location.href='@{/board/list}'|">
-            </td>
-        </tr>
-    </table>
-</form>
+<div id="container">
+    <form th:action="@{|/board/modify/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}" method="post">
+        <div class="mb-3">
+            <label for="subject" class="form-label">제목</label>
+            <input type="text" class="form-control" name="subject" id="subject" maxlength="50" th:value="${findPost.subject}" required="required">
+        </div>
 
+        <div class="mb-3">
+            <label for="content" class="form-label">내용</label>
+            <textarea class="form-control" name="content" id="content" rows="10" required="required">[[${findPost.content}]]</textarea>
+        </div>
 
+        <div>
+            <input type="submit" value="수정하기" class="btn btn-outline-dark">
+            <input type="reset" value="다시쓰기" class="btn btn-outline-dark">
+            <input type="button" value="목록가기" th:onclick="|location.href='@{/board/list}'|" class="btn btn-outline-dark">
+        </div>
+    </form>
+</div>
 
 <div th:insert="footer.html" id="footer"></div>
 

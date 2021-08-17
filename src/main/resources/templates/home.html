@@ -2,13 +2,16 @@
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <title>Title</title>
 </head>
 <body>
 <div th:insert="header.html" id="header"></div>
-<h1 id="title">Spring Boot 이용한 게시판 구현하기</h1>
-<p>로그인 / 회원가입 기능 구현</p>
-<p>게시판에 CRUD 기능 구현</p>
+<div id="container">
+    <h1 id="title">Spring Boot 이용한 게시판 구현하기</h1>
+    <p>로그인 / 회원가입 기능 구현</p>
+    <p>게시판에 CRUD 기능 구현</p>
+</div>
 <div th:insert="footer.html" id="footer"></div>
 </body>
 </html>

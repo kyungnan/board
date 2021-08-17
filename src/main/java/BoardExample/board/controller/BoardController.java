@@ -1,6 +1,7 @@
 package BoardExample.board.controller;
 
 import BoardExample.board.domain.Board;
+import BoardExample.board.domain.BoardMember;
 import BoardExample.board.domain.Criteria;
 import BoardExample.board.domain.PageMaker;
 import BoardExample.board.mapper.BoardMapper;

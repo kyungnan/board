@@ -3,32 +3,35 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <title>Title</title>
 </head>
 
 <body>
 <div th:insert="header.html" id="header"></div>
-<h1>로그인</h1>
 
-<!-- 로그인 입력 폼 -->
-<form name="loginForm" th:action="@{/account/login}" method="post" onsubmit="return loginCheck()">
-    <table>
-        <tr>
-            <td>ID</td>
-            <td><input type="text" name="username" id="username" placeholder="ID" required="required"></td>
-        </tr>
-        <tr>
-            <td>Password</td>
-            <td><input type="password" name="password" id="password" placeholder="Password" required="required"></td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <input type="submit" value="로그인">
-                <button type="button" th:onclick="|location.href='@{/account/join}'|">회원가입</button>
-            </td>
-        </tr>
-    </table>
-</form>
+<div id="container">
+
+    <!-- 로그인 입력 폼 -->
+    <main class="form-signin">
+        <form name="loginForm" th:action="@{/account/login}" method="post" onsubmit="return loginCheck()">
+            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+            <div class="form-floating">
+                <input type="text" name="username" class="form-control" id="username" placeholder="ID" required="required">
+                <label for="username">ID</label>
+            </div>
+            <div class="form-floating">
+                <input type="password" name="password" class="form-control" id="password" placeholder="Password" required="required">
+                <label for="password">Password</label>
+            </div>
+
+            <input type="submit" value="Sign in" class="w-100 btn btn-lg btn-primary">
+         <!--<button type="button" th:onclick="|location.href='@{/account/join}'|">회원가입</button>-->
+        </form>
+    </main>
+</div>
+
 <div th:insert="footer.html" id="footer"></div>
 </body>
 
