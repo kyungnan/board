@@ -12,7 +12,8 @@
 <div th:insert="header.html" id="header"></div>
 
 <div id="container">
-    <form th:action="@{|/board/modify/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}" method="post">
+    <form th:action="@{|/board/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}" method="post">
+        <input type="hidden" name="_method" value="put">
         <div class="mb-3">
             <label for="subject" class="form-label">제목</label>
             <input type="text" class="form-control" name="subject" id="subject" maxlength="50" th:value="${findPost.subject}" required="required">
