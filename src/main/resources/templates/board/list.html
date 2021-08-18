@@ -57,15 +57,15 @@
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:if="${pageMaker.prev} == true">
                     <a class="page-link"
-                       th:href="@{/board/list(page=${pageMaker.startPage}-1, cntPerPage=${pageMaker.criteria.cntPerPage})}" tabindex="-1" aria-disabled="true">
+                       th:href="@{/board(page=${pageMaker.startPage}-1, cntPerPage=${pageMaker.criteria.cntPerPage})}" tabindex="-1" aria-disabled="true">
                         Previous</a>
                 </li>
 
                 <li class="page-item" th:each="idx,iterStat : ${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}" th:classappend="${pageMaker.criteria.page} == ${idx} ? active : null">
-                    <a class="page-link" th:href="@{/board/list(page=${idx},cntPerPage=${pageMaker.criteria.cntPerPage})}" th:text="${idx}">1</a></li>
+                    <a class="page-link" th:href="@{/board(page=${idx},cntPerPage=${pageMaker.criteria.cntPerPage})}" th:text="${idx}">1</a></li>
 
                 <li class="page-item" th:if="${pageMaker.next} == true and ${pageMaker.endPage > 0}">
-                    <a class="page-link" th:href="@{/board/list(page=${pageMaker.endPage}+1,cntPerPage=${pageMaker.criteria.cntPerPage})}">
+                    <a class="page-link" th:href="@{/board(page=${pageMaker.endPage}+1,cntPerPage=${pageMaker.criteria.cntPerPage})}">
                         Next</a></li>
             </ul>
         </nav>

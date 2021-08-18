@@ -26,7 +26,7 @@ public class BoardController {
     private final BoardService boardService;
     private final BoardMapper boardMapper;
 
-    @GetMapping("/list")
+    @GetMapping
     public String list(@ModelAttribute("criteria") Criteria criteria, Model model){
         // 리스트 조회
         List<Board> boardList = boardMapper.getListWithPaging(criteria);
@@ -63,7 +63,7 @@ public class BoardController {
     @PostMapping("/post")
     public String post(String subject, String content, HttpSession session){
         boardService.createPost(subject, content, session);
-        return "redirect:/board/list";       //redirect:/ 없이 board/list 하면 글 쓰기 후 리스트 보여줄때 제대로 반영 X
+        return "redirect:/board";       //redirect:/ 없이 board/list 하면 글 쓰기 후 리스트 보여줄때 제대로 반영 X
     }
 
     @GetMapping("/content/{postno}")
@@ -101,12 +101,12 @@ public class BoardController {
     public String modify(@PathVariable("postno") int postno, @RequestParam int page, @RequestParam int cntPerPage, Board updatePost){
         Board post = boardMapper.getByPostNo(postno);
         boardService.updatePost(post, updatePost);
-        return "redirect:/board/list" + "?page=" + page + "&cntPerPage=" + cntPerPage;
+        return "redirect:/board" + "?page=" + page + "&cntPerPage=" + cntPerPage;
     }
 
     @GetMapping("/remove/{postno}")
     public String modify(@PathVariable("postno") int postno, @RequestParam int page, @RequestParam int cntPerPage){
         boardMapper.deletePost(postno);
-        return "redirect:/board/list" + "?page=" + page + "&cntPerPage=" + cntPerPage;
+        return "redirect:/board" + "?page=" + page + "&cntPerPage=" + cntPerPage;
     }
 }

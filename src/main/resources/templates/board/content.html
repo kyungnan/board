@@ -31,7 +31,7 @@
 
             <tr>
                 <td colspan="3">
-                    <button type="button" class="btn btn-outline-dark"><a th:href="@{|/board/list?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>목록가기</span></a></button>
+                    <button type="button" class="btn btn-outline-dark"><a th:href="@{|/board?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>목록가기</span></a></button>
                     <span th:if="${session.member.getName().equals(findPost.writer)}">
                         <button type="button" class="btn btn-outline-dark"><a th:href="@{|/board/modify/${findPost.postno}?&page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>수정</span></a></button>
                         <button type="button" class="btn btn-outline-dark"><a th:href="@{|/board/remove/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>삭제</span></a></button>
