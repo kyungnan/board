@@ -11,6 +11,11 @@
 <div th:insert="header.html" id="header"></div>
 
 <div id="container">
+    <!-- ID 중복인 경우 에러 메시지 -->
+    <div class="alert alert-danger" role="alert" th:if="${msg}">
+        <span th:text="${msg}"></span>
+    </div>
+
     <!-- 회원가입 입력 폼 -->
     <main class="form-signin">
         <form name="joinForm" th:action="@{/account/join}" method="post">
@@ -19,7 +24,6 @@
             <div class="form-floating">
                 <input type="text" name="username" class="form-control" id="username" placeholder="ID" required="required">
                 <label for="username">ID</label>
-                <button type="button" th:onclick="#">중복확인</button>
             </div>
 
             <div class="form-floating">

@@ -6,6 +6,7 @@ import BoardExample.board.domain.Criteria;
 import BoardExample.board.domain.PageMaker;
 import BoardExample.board.mapper.BoardMapper;
 import BoardExample.board.service.BoardService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +19,12 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/board")
+@RequiredArgsConstructor
 public class BoardController {
     private static Logger logger = LoggerFactory.getLogger(BoardController.class);
 
-    private BoardService boardService;
-    private BoardMapper boardMapper;
-
-    @Autowired
-    public BoardController(BoardService boardService, BoardMapper boardMapper) {
-        this.boardService = boardService;
-        this.boardMapper = boardMapper;
-    }
+    private final BoardService boardService;
+    private final BoardMapper boardMapper;
 
     @GetMapping("/list")
     public String list(@ModelAttribute("criteria") Criteria criteria, Model model){

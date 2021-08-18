@@ -12,6 +12,16 @@
 
 <div id="container">
 
+    <!-- ID 존재하지 않을 경우 에러 메시지 -->
+    <div class="alert alert-primary" role="alert" th:if="${msg_id}">
+        <span th:text="${msg_id}"></span>
+    </div>
+
+    <!-- Password가 다를 경우 에러 메시지 -->
+    <div class="alert alert-primary" role="alert" th:if="${msg_pw}">
+        <span th:text="${msg_pw}"></span>
+    </div>
+
     <!-- 로그인 입력 폼 -->
     <main class="form-signin">
         <form name="loginForm" th:action="@{/account/login}" method="post" onsubmit="return loginCheck()">

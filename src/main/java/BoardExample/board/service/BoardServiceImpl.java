@@ -3,6 +3,7 @@ package BoardExample.board.service;
 import BoardExample.board.domain.Board;
 import BoardExample.board.domain.BoardMember;
 import BoardExample.board.mapper.BoardMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,14 +11,10 @@ import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 
 @Service
+@RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService{
 
-    private BoardMapper boardMapper;
-
-    @Autowired
-    public BoardServiceImpl(BoardMapper boardMapper) {
-        this.boardMapper = boardMapper;
-    }
+    private final BoardMapper boardMapper;
 
     @Override
     public void createPost(String subject, String content, HttpSession session) {
