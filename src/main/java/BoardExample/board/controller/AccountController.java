@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/account")
+@RequestMapping("/members")
 @RequiredArgsConstructor
 public class AccountController {
 
@@ -22,7 +22,7 @@ public class AccountController {
 
     @GetMapping("/login")
     public String loginForm() {
-        return "/account/login";
+        return "/members/login";
     }
 
     @PostMapping("/login")
@@ -33,14 +33,14 @@ public class AccountController {
         if (member == null) {
             String msg_id = "해당 ID는 존재하지 않습니다.";
             model.addAttribute("msg_id",msg_id);
-            return "/account/login";
+            return "/members/login";
         }
 
         //id는 DB에 존재하지만, password가 일치하지 않으면,
         if (!password.equals(member.getPassword())) {
             String msg_pw = "Password가 일치하지 않습니다.";
             model.addAttribute("msg_pw", msg_pw);
-            return "/account/login";
+            return "/members/login";
         }
 
         //id와 password 일치하면 session에 정보를 저장
@@ -50,7 +50,7 @@ public class AccountController {
 
     @GetMapping("/join")
     public String joinForm() {
-        return "/account/join";
+        return "/members/join";
     }
 
     @PostMapping("/join")
@@ -61,7 +61,7 @@ public class AccountController {
         if (result == -1){
             String msg = "해당 ID는 이미 사용중입니다.";
             model.addAttribute("msg", msg);
-            return "/account/join";
+            return "/members/join";
         }
         return "redirect:/";
     }

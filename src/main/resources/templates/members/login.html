@@ -24,7 +24,7 @@
 
     <!-- 로그인 입력 폼 -->
     <main class="form-signin">
-        <form name="loginForm" th:action="@{/account/login}" method="post" onsubmit="return loginCheck()">
+        <form name="loginForm" th:action="@{/members/login}" method="post" onsubmit="return loginCheck()">
             <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
 
             <div class="form-floating">
@@ -37,7 +37,6 @@
             </div>
 
             <input type="submit" value="Sign in" class="w-100 btn btn-lg btn-primary">
-         <!--<button type="button" th:onclick="|location.href='@{/account/join}'|">회원가입</button>-->
         </form>
     </main>
 </div>
