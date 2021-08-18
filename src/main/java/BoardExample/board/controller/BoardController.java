@@ -26,6 +26,7 @@ public class BoardController {
     private final BoardService boardService;
     private final BoardMapper boardMapper;
 
+    // 게시글 전체 목록
     @GetMapping
     public String list(@ModelAttribute("criteria") Criteria criteria, Model model){
         // 리스트 조회
@@ -40,6 +41,21 @@ public class BoardController {
         return "/board/list";
     }
 
+    // 게시글 상세보기
+    @GetMapping("/{postno}")
+    public String content(@PathVariable("postno") int postno, @RequestParam int page, @RequestParam int cntPerPage, Model model){
+        Board findPost = boardMapper.getByPostNo(postno);
+        boardMapper.updateCount(postno);
+        model.addAttribute("findPost", findPost);
+
+        Criteria criteria = new Criteria();
+        criteria.setPage(page);
+        criteria.setCntPerPage(cntPerPage);
+        PageMaker pageMaker = new PageMaker();
+        pageMaker.setCriteria(criteria);
+        model.addAttribute("pageMaker", pageMaker);
+        return "board/content";
+    }
     @GetMapping("/search")
     public String searchList(@RequestParam("searchWriter") String searchWriter, @ModelAttribute("criteria") Criteria criteria, Model model){
         // 리스트 조회
@@ -66,21 +82,7 @@ public class BoardController {
         return "redirect:/board";       //redirect:/ 없이 board/list 하면 글 쓰기 후 리스트 보여줄때 제대로 반영 X
     }
 
-    @GetMapping("/content/{postno}")
-    public String content(@PathVariable("postno") int postno, @RequestParam int page, @RequestParam int cntPerPage, Model model){
-        Board findPost = boardMapper.getByPostNo(postno);
-        boardMapper.updateCount(postno);
-        model.addAttribute("findPost", findPost);
 
-        Criteria criteria = new Criteria();
-        criteria.setPage(page);
-        criteria.setCntPerPage(cntPerPage);
-        PageMaker pageMaker = new PageMaker();
-        pageMaker.setCriteria(criteria);
-        model.addAttribute("pageMaker", pageMaker);
-
-        return "board/content";
-    }
 
     @GetMapping("/modify/{postno}")
     public String modifyForm(@PathVariable("postno") int postno, @RequestParam int page, @RequestParam int cntPerPage, Model model){
