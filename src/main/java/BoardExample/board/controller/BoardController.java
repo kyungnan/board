@@ -6,6 +6,8 @@ import BoardExample.board.domain.Criteria;
 import BoardExample.board.domain.PageMaker;
 import BoardExample.board.mapper.BoardMapper;
 import BoardExample.board.service.BoardService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +19,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/board")
 public class BoardController {
+    private static Logger logger = LoggerFactory.getLogger(BoardController.class);
 
-    @Autowired
     private BoardService boardService;
-    @Autowired
     private BoardMapper boardMapper;
 
+    @Autowired
     public BoardController(BoardService boardService, BoardMapper boardMapper) {
         this.boardService = boardService;
         this.boardMapper = boardMapper;
@@ -39,8 +41,22 @@ public class BoardController {
         pageMaker.setCriteria(criteria);
         pageMaker.setTotalCnt(boardMapper.getTotalCnt());
         model.addAttribute("pageMaker", pageMaker);
-
         return "/board/list";
+    }
+
+    @GetMapping("/search")
+    public String searchList(@RequestParam("searchWriter") String searchWriter, @ModelAttribute("criteria") Criteria criteria, Model model){
+        // 리스트 조회
+        List<Board> boardList = boardMapper.searchWriter(searchWriter, criteria);
+        model.addAttribute("boardList", boardList);
+
+        // 게시판 목록 하단 페이징 처리 기능
+        PageMaker pageMaker = new PageMaker();
+        pageMaker.setCriteria(criteria);
+        pageMaker.setTotalCnt(boardMapper.searchCnt(searchWriter));
+        model.addAttribute("pageMaker", pageMaker);
+        model.addAttribute("searchWriter", searchWriter);
+        return "/board/searchList";
     }
 
     @GetMapping("/post")

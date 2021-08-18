@@ -1,0 +1,61 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <title>Title</title>
+</head>
+
+<body>
+<div th:insert="header.html" id="header"></div>
+
+<div id="container">
+
+    <table class="table">
+        <thead class="table-light">
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+            <th>조회수</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="post : ${boardList}">
+            <td><span th:text="${post.postno}"></span></td>
+            <td th:if="${session.member != null}">
+                <a th:href="@{|/board/content/${post.postno}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}">
+                    <span th:text="${post.subject}" th:onclick="${post.count++}"></span>
+                </a>
+            </td>
+            <td th:if="${session.member == null}"><span th:text="${post.subject}"></span></td>
+            <td><span th:text="${post.writer}"></span></td>
+            <td><span th:text="${#calendars.format(post.regdate, 'yyyy-MM-dd HH:mm')}"></span></td>
+            <td><span th:text="${post.count}"></span></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:if="${pageMaker.prev} == true">
+                <a class="page-link"
+                   th:href="@{/board/search(searchWriter=${searchWriter}, page=${pageMaker.startPage}-1, cntPerPage=${pageMaker.criteria.cntPerPage})}" tabindex="-1" aria-disabled="true">
+                    Previous</a>
+            </li>
+
+            <li class="page-item" th:each="idx,iterStat : ${#numbers.sequence(pageMaker.startPage,pageMaker.endPage)}" th:classappend="${pageMaker.criteria.page} == ${idx} ? active : null">
+                <a class="page-link" th:href="@{/board/search(searchWriter=${searchWriter},page=${idx},cntPerPage=${pageMaker.criteria.cntPerPage})}" th:text="${idx}">1</a></li>
+
+            <li class="page-item" th:if="${pageMaker.next} == true and ${pageMaker.endPage > 0}">
+                <a class="page-link" th:href="@{/board/search(searchWriter=${searchWriter}, page=${pageMaker.endPage}+1,cntPerPage=${pageMaker.criteria.cntPerPage})}">
+                    Next</a></li>
+        </ul>
+    </nav>
+</div>
+
+<div th:insert="footer.html" id="footer"></div>
+</body>
+</html>

@@ -12,12 +12,20 @@
 
     <div id="container">
 
+        <!-- 검색 기능 -->
+        <form th:action="@{/board/search}" method="get" id="searchForm">
+            <input id="searchWriter" name="searchWriter" type="text" placeholder="작성자를 입력하세요.">
+            <input type="submit" value="검색" class="btn btn-outline-dark">
+        </form>
+
+        <!-- 글쓰기 버튼 -->
         <table>
             <tr>
                 <td th:if="${session.member != null}"><button type="button" class="btn btn-outline-dark" th:onclick="location.href='/board/post'">글쓰기</button></td>
             </tr>
         </table>
 
+        <!-- 게시글 리스트 -->
         <table class="table">
             <thead class="table-light">
             <tr>
@@ -44,6 +52,7 @@
             </tbody>
         </table>
 
+        <!-- 페이징 -->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:if="${pageMaker.prev} == true">

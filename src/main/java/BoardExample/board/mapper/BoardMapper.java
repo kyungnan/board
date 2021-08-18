@@ -3,9 +3,11 @@ package BoardExample.board.mapper;
 import BoardExample.board.domain.Board;
 import BoardExample.board.domain.Criteria;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 @Repository
@@ -33,4 +35,10 @@ public interface BoardMapper {
 
     // 게시글 삭제
     void deletePost(int postNo);
+
+    // 검색 기능(작성자)
+    List<Board> searchWriter(@Param("writer") String writer, @Param("criteria") Criteria criteria);
+
+    // 검색 결과수
+    int searchCnt(String writer);
 }

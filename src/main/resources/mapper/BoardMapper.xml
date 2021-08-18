@@ -62,4 +62,24 @@
         from board
         where postno = #{postno}
     </delete>
+
+    <!-- 작성자 검색 기능 -->
+    <select id="searchWriter" resultType="BoardExample.board.domain.Board">
+        select orderd_board.*
+        FROM(
+        SELECT *
+        FROM board
+        WHERE writer like concat('%',#{writer},'%')
+        order by postno
+        ) as orderd_board
+        ORDER BY postno desc
+        LIMIT #{criteria.startIndex}, #{criteria.cntPerPage}
+    </select>
+
+    <!-- 작성자 검색결과 게시글 수 -->
+    <select id="searchCnt" resultType="java.lang.Integer">
+        select count(*)
+        from board
+        where writer like concat('%',#{writer},'%')
+    </select>
 </mapper>
