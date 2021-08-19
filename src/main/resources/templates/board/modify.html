@@ -27,7 +27,8 @@
         <div>
             <input type="submit" value="수정하기" class="btn btn-outline-dark">
             <input type="reset" value="다시쓰기" class="btn btn-outline-dark">
-            <input type="button" value="목록가기" th:onclick="|location.href='@{/board}'|" class="btn btn-outline-dark">
+            <input type="button" value="목록가기" class="btn btn-outline-dark"
+                   th:onclick="|location.href='@{/board?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|">
         </div>
     </form>
 </div>

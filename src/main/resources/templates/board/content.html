@@ -31,12 +31,20 @@
 
             <tr>
                 <td colspan="3">
-                    <button type="button" class="btn btn-outline-dark"><a th:href="@{|/board?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>목록가기</span></a></button>
-                    <span th:if="${session.member.getName().equals(findPost.writer)}">
-                        <button type="button" class="btn btn-outline-dark"><a th:href="@{|/board/post/${findPost.postno}?&page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>수정</span></a></button>
-                        <button type="button" class="btn btn-outline-dark"><a th:href="@{|/board/remove/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"><span>삭제</span></a></button>
-                    </span>
+                    <input type="button" value="목록" class="btn btn-outline-dark"
+                           th:onclick="|location.href='@{|/board?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|"
+                    >
 
+                    <span th:if="${session.member.getName().equals(findPost.writer)}">
+                        <input type="button" value="수정" class="btn btn-outline-dark"
+                        th:onclick="|location.href='@{|/board/post/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|"
+                        >
+
+                        <form th:action="@{|/board/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}" method="post" id="delete_btn">
+                            <input type="hidden" name="_method" value="delete">
+                            <input type="submit" value="삭제" class="btn btn-outline-dark">
+                        </form>
+                    </span>
                 </td>
             </tr>
         </table>

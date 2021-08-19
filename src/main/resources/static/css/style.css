@@ -3,3 +3,17 @@
     width: 80%;
     margin: 100px auto;
 }
+#searchForm{
+    float:right;
+    margin-bottom: 20px;
+}
+
+#searchWriter{
+    height: 38px;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+#delete_btn{
+    display: inline;
+}

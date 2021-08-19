@@ -110,7 +110,8 @@ public class BoardController {
         return "redirect:/board" + "?page=" + page + "&cntPerPage=" + cntPerPage;
     }
 
-    @GetMapping("/remove/{postno}")
+    // 글 삭제 처리
+    @DeleteMapping("/{postno}")
     public String modify(@PathVariable("postno") int postno, @RequestParam int page, @RequestParam int cntPerPage){
         boardMapper.deletePost(postno);
         return "redirect:/board" + "?page=" + page + "&cntPerPage=" + cntPerPage;
