@@ -26,3 +26,20 @@ CREATE TABLE `board_member` (
 	PRIMARY KEY (`id`),
 	UNIQUE INDEX `username` (`username`)
 )
+
+--board_reply 테이블 생성(댓글)
+CREATE TABLE `board_reply` (
+	`id_reply` INT(10) NOT NULL AUTO_INCREMENT,
+	`content_reply` TEXT(65535) NOT NULL COLLATE 'utf8_general_ci',
+	`postno` INT(11) NOT NULL,
+	`id_member` BIGINT(20) NOT NULL,
+	`reg_date` DATETIME NOT NULL,
+	PRIMARY KEY (`id_reply`) USING BTREE,
+	INDEX `FK__board` (`postno`) USING BTREE,
+	INDEX `FK__board_member` (`id_member`) USING BTREE,
+	CONSTRAINT `FK__board` FOREIGN KEY (`postno`) REFERENCES `board_project`.`board` (`postno`) ON UPDATE RESTRICT ON DELETE RESTRICT,
+	CONSTRAINT `FK__board_member` FOREIGN KEY (`id_member`) REFERENCES `board_project`.`board_member` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;

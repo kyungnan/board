@@ -1,10 +1,8 @@
 package BoardExample.board.controller;
 
-import BoardExample.board.domain.Board;
-import BoardExample.board.domain.BoardMember;
-import BoardExample.board.domain.Criteria;
-import BoardExample.board.domain.PageMaker;
+import BoardExample.board.domain.*;
 import BoardExample.board.mapper.BoardMapper;
+import BoardExample.board.mapper.BoardReplyMapper;
 import BoardExample.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -15,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,6 +24,7 @@ public class BoardController {
 
     private final BoardService boardService;
     private final BoardMapper boardMapper;
+    private final BoardReplyMapper boardReplyMapper;
 
     // 게시글 전체 목록
     @GetMapping
@@ -47,6 +47,9 @@ public class BoardController {
         Board findPost = boardMapper.getByPostNo(postno);
         boardMapper.updateCount(postno);
         model.addAttribute("findPost", findPost);
+
+        List<Reply> replyList = boardReplyMapper.getByPostNo(postno);
+        model.addAttribute("replyList", replyList);
 
         Criteria criteria = new Criteria();
         criteria.setPage(page);

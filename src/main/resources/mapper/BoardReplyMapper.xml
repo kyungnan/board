@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardExample.board.mapper.BoardReplyMapper">
+
+    <!-- 댓글 조회 -->
+    <select id="getByPostNo" resultType="BoardExample.board.domain.Reply">
+        SELECT r.*, m.name
+        FROM board_member m join board_reply r
+        WHERE m.id = r.id_member AND r.postno = #{postno};
+    </select>
+
+</mapper>
