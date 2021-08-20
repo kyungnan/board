@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/js/board.js"></script>
 </head>
 
 <body>
@@ -51,15 +53,20 @@
 
         <!--댓글 작성-->
         <div class="card-header bg-light">
-            <i class="fa fa-comment fa"></i> 댓글
+            <i class="fa fa-comment fa"></i>댓글
         </div>
         <div class="card">
-            <div class="card-body">
-                <textarea class="form-control" rows="1"></textarea>
-            </div>
-            <div class="card-footer">
-                <button class="btn btn-outline-dark">등록</button>
-            </div>
+            <form>
+                <input type="hidden" id="postno" th:value="${findPost.postno}">
+                <input type="hidden" id="page" th:value="${pageMaker.criteria.page}">
+                <input type="hidden" id="cntPerPage" th:value="${pageMaker.criteria.cntPerPage}">
+                <div class="card-body">
+                    <textarea id="content_reply" class="form-control" rows="1"></textarea>
+                </div>
+                <div class="card-footer">
+                    <button type="button" id="btn_reply_save" class="btn btn-outline-dark">등록</button>
+                </div>
+            </form>
         </div>
         <br>
 

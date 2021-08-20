@@ -10,4 +10,8 @@
         ORDER BY r.id_reply DESC;
     </select>
 
+    <insert id="createReply">
+        insert into board_reply(content_reply, postno, id_member, reg_date)
+        values(#{content_reply},#{postno},#{id_member},#{reg_date})
+    </insert>
 </mapper>

@@ -11,4 +11,6 @@ public interface BoardReplyMapper {
     // 댓글 조회
     List<Reply> getByPostNo(@Param("postno") int postno);
 
+    // 댓글 작성
+    void createReply(Reply reply);
 }
