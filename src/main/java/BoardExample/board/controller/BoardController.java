@@ -120,7 +120,7 @@ public class BoardController {
 
     // 글 삭제 처리
     @DeleteMapping("/{postno}")
-    public String modify(@PathVariable("postno") int postno, @RequestParam int page, @RequestParam int cntPerPage){
+    public String delete(@PathVariable("postno") int postno, @RequestParam int page, @RequestParam int cntPerPage){
         boardMapper.deletePost(postno);
         return "redirect:/board" + "?page=" + page + "&cntPerPage=" + cntPerPage;
     }
@@ -128,9 +128,14 @@ public class BoardController {
     // 댓글 입력 처리
     @PostMapping("/{postno}/reply")
     public ResponseEntity<String> replySave(@PathVariable int postno, @RequestBody String content_reply, HttpSession session){
-
-        System.out.println("댓글내용 ::: " + content_reply);
         boardService.createReply(session, postno, content_reply);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 댓글 삭제 처리
+    @DeleteMapping("/{postno}/reply/{id_reply}")
+    public ResponseEntity<String> replyDelete(@PathVariable("id_reply") int id_reply){
+        boardReplyMapper.deleteReply(id_reply);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

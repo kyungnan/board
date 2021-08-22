@@ -13,4 +13,7 @@ public interface BoardReplyMapper {
 
     // 댓글 작성
     void createReply(Reply reply);
+
+    // 댓글 삭제
+    void deleteReply(int id_reply);
 }

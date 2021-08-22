@@ -10,8 +10,15 @@
         ORDER BY r.id_reply DESC;
     </select>
 
+    <!-- 댓글 작성 -->
     <insert id="createReply">
         insert into board_reply(content_reply, postno, id_member, reg_date)
         values(#{content_reply},#{postno},#{id_member},#{reg_date})
     </insert>
+
+    <!-- 댓글 삭제 -->
+    <delete id="deleteReply">
+        DELETE FROM board_reply
+        WHERE id_reply=#{id_reply}
+    </delete>
 </mapper>
