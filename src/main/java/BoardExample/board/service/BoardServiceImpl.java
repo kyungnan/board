@@ -4,14 +4,14 @@ import BoardExample.board.domain.Board;
 import BoardExample.board.domain.BoardMember;
 import BoardExample.board.domain.Reply;
 import BoardExample.board.mapper.BoardMapper;
+import BoardExample.board.mapper.BoardMemberMapper;
 import BoardExample.board.mapper.BoardReplyMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.json.JSONParser;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
 
 @Service
@@ -20,12 +20,15 @@ public class BoardServiceImpl implements BoardService{
 
     private final BoardMapper boardMapper;
     private final BoardReplyMapper boardReplyMapper;
+    private final BoardMemberMapper boardMemberMapper;
 
     @Override
-    public void createPost(String subject, String content, HttpSession session) {
-        BoardMember member = (BoardMember)session.getAttribute("member");
+    public void createPost(String subject, String content, Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String nameUserDetails = boardMemberMapper.getNameById(userDetails.getUsername());
+
         Board post = new Board();
-        post.setWriter(member.getName());
+        post.setWriter(nameUserDetails);
         post.setRegdate(new Timestamp(System.currentTimeMillis()));
         post.setModidate(new Timestamp(System.currentTimeMillis()));
         post.setSubject(subject);
@@ -41,11 +44,14 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void createReply(HttpSession session, int postno, String content_reply) {
+    public void createReply(Authentication authentication, int postno, String content_reply) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        BoardMember member = boardMemberMapper.getById(userDetails.getUsername());
+
         Reply reply = new Reply();
         reply.setPostno(postno);
         reply.setReg_date(new Timestamp(System.currentTimeMillis()));
-        reply.setId_member(((BoardMember)session.getAttribute("member")).getId());
+        reply.setId_member(member.getId());
         reply.setContent_reply(content_reply);
         boardReplyMapper.createReply(reply);
     }

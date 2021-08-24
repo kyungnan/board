@@ -43,3 +43,6 @@ CREATE TABLE `board_reply` (
 COLLATE='utf8_general_ci'
 ENGINE=InnoDB
 ;
+
+--board_member 테이블 role 필드 추가
+ALTER TABLE board_member ADD role varcher(50)

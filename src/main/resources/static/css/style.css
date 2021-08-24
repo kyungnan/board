@@ -17,3 +17,8 @@
 #delete_btn{
     display: inline;
 }
+
+#form{
+    width: 500px;
+    margin: 0 auto;
+}

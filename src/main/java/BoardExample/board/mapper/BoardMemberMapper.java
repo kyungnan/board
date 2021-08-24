@@ -8,12 +8,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BoardMemberMapper {
 
-    //id로 회원 조회
+    //ID로 회원 조회
     BoardMember getById(String username);
 
-    //id 중복체크
+    //ID 중복체크
     int idChk(BoardMember member);
 
     //회원가입
     void joinMember(BoardMember member);
+
+    //ID로 회원이름 조회
+    String getNameById(String username);
 }

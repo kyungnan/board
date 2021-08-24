@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
-<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -19,11 +19,7 @@
         </form>
 
         <!-- 글쓰기 버튼 -->
-        <table>
-            <tr>
-                <td th:if="${session.member != null}"><button type="button" class="btn btn-outline-dark" th:onclick="location.href='/board/post'">글쓰기</button></td>
-            </tr>
-        </table>
+        <a class="btn btn-outline-dark" th:href="@{/board/post}">글쓰기</a>
 
         <!-- 게시글 리스트 -->
         <table class="table">
@@ -39,12 +35,11 @@
             <tbody>
             <tr th:each="post : ${boardList}" border="1">
                 <td><span th:text="${post.postno}"></span></td>
-                <td th:if="${session.member != null}">
+                <td>
                     <a th:href="@{|/board/${post.postno}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}">
                         <span th:text="${post.subject}" th:onclick="${post.count++}"></span>
                     </a>
                 </td>
-                <td th:if="${session.member == null}"><span th:text="${post.subject}"></span></td>
                 <td><span th:text="${post.writer}"></span></td>
                 <td><span th:text="${#calendars.format(post.regdate, 'yyyy-MM-dd HH:mm')}"></span></td>
                 <td><span th:text="${post.count}"></span></td>

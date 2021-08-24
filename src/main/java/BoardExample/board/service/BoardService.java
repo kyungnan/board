@@ -1,15 +1,13 @@
 package BoardExample.board.service;
 
 import BoardExample.board.domain.Board;
-import BoardExample.board.domain.Reply;
-
-import javax.servlet.http.HttpSession;
+import org.springframework.security.core.Authentication;
 
 public interface BoardService {
 
-    void createPost(String subject, String content, HttpSession session);
+    void createPost(String subject, String content, Authentication authentication);
 
     void updatePost(Board post, Board updatePost);
 
-    void createReply(HttpSession session, int postno, String content_reply);
+    void createReply(Authentication authentication, int postno, String content_reply);
 }

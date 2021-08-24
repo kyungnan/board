@@ -37,7 +37,7 @@
                            th:onclick="|location.href='@{|/board?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|"
                     >
 
-                    <span th:if="${session.member.getName().equals(findPost.writer)}">
+                    <span th:if="${nameUserDetails.equals(findPost.writer)}">
                         <input type="button" value="수정" class="btn btn-outline-dark"
                         th:onclick="|location.href='@{|/board/post/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|"
                         >
@@ -82,7 +82,7 @@
                             <div class="d-flex">
                                 <div class="font-italic" th:text="${reply.name}"></div>&nbsp;
                                 <button type="button" th:attr="onclick=|replyDelete('${reply.postno}', '${reply.id_reply}')|"
-                                    th:disabled="${!session.member.getName.equals(reply.name)}">삭제</button>
+                                        th:disabled="${!nameUserDetails.equals(reply.name)}">삭제</button>
                             </div>
                         </li>
                     </form>
