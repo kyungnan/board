@@ -32,9 +32,15 @@ dependencies {
 
 	// bootstrap
 	implementation group: 'org.webjars', name: 'bootstrap', version: '5.1.0'
+    implementation 'org.jetbrains:annotations:20.1.0'
 
-	// devtools
+    // devtools
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+	// 스프링 시큐리티
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-test'
+	implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
