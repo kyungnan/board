@@ -9,4 +9,5 @@ public class BoardMember {
     private String password;        //패스워드
     private String name;            //사용자이름
     private String email;           //사용자이메일
+    private String role;            //사용자권한
 }

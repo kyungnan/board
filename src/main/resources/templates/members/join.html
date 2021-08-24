@@ -11,40 +11,43 @@
 <div th:insert="header.html" id="header"></div>
 
 <div id="container">
-    <!-- ID 중복인 경우 에러 메시지 -->
-    <div class="alert alert-danger" role="alert" th:if="${msg}">
-        <span th:text="${msg}"></span>
+    <div id="form">
+        <!-- ID 중복인 경우 에러 메시지 -->
+        <div class="alert alert-danger" role="alert" th:if="${msg}">
+            <span th:text="${msg}"></span>
+        </div>
+
+        <div>
+            <!-- 회원가입 입력 폼 -->
+            <main class="form-signin">
+                <form name="joinForm" th:action="@{/members/join}" method="post">
+                    <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
+
+                    <div class="form-floating">
+                        <input type="text" name="username" class="form-control" id="username" placeholder="ID" required="required">
+                        <label for="username">ID</label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Password" required="required">
+                        <label for="password">Password</label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input type="text" name="name" class="form-control" id="name" placeholder="Name" required="required">
+                        <label for="name">Name</label>
+                    </div>
+
+                    <div class="form-floating">
+                        <input type="text" name="email" class="form-control" id="email" placeholder="E-mail" required="required">
+                        <label for="email">E-mail</label>
+                    </div>
+
+                    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
+                </form>
+            </main>
+        </div>
     </div>
-
-    <!-- 회원가입 입력 폼 -->
-    <main class="form-signin">
-        <form name="joinForm" th:action="@{/members/join}" method="post">
-            <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
-
-            <div class="form-floating">
-                <input type="text" name="username" class="form-control" id="username" placeholder="ID" required="required">
-                <label for="username">ID</label>
-            </div>
-
-            <div class="form-floating">
-                <input type="password" name="password" class="form-control" id="password" placeholder="Password" required="required">
-                <label for="password">Password</label>
-            </div>
-
-            <div class="form-floating">
-                <input type="text" name="name" class="form-control" id="name" placeholder="Name" required="required">
-                <label for="name">Name</label>
-            </div>
-
-            <div class="form-floating">
-                <input type="text" name="email" class="form-control" id="email" placeholder="E-mail" required="required">
-                <label for="email">E-mail</label>
-            </div>
-
-            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
-            <p class="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
-        </form>
-    </main>
 </div>
 
 <div th:insert="footer.html" id="footer"></div>

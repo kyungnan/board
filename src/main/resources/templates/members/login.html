@@ -11,34 +11,35 @@
 <div th:insert="header.html" id="header"></div>
 
 <div id="container">
+    <div id="form">
+        <!-- 로그인 실패 에러 메세지 -->
+        <div th:if="${param.error}" class="alert alert-primary" role="alert">
+            Invalid username and password.
+        </div>
 
-    <!-- ID 존재하지 않을 경우 에러 메시지 -->
-    <div class="alert alert-primary" role="alert" th:if="${msg_id}">
-        <span th:text="${msg_id}"></span>
+        <!-- 로그아웃 메세지 -->
+        <div th:if="${param.logout}" class="alert alert-primary" role="alert">
+            You have been logged out.
+        </div>
+
+        <!-- 로그인 입력 폼 -->
+        <main class="form-signin">
+            <form name="loginForm" th:action="@{/members/login}" method="post">
+                <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+
+                <div class="form-floating">
+                    <input type="text" name="username" class="form-control" id="username" placeholder="Username" required="required">
+                    <label for="username">ID</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" name="password" class="form-control" id="password" placeholder="Password" required="required">
+                    <label for="password">Password</label>
+                </div>
+
+                <input type="submit" value="Sign in" class="w-100 btn btn-lg btn-primary">
+            </form>
+        </main>
     </div>
-
-    <!-- Password가 다를 경우 에러 메시지 -->
-    <div class="alert alert-primary" role="alert" th:if="${msg_pw}">
-        <span th:text="${msg_pw}"></span>
-    </div>
-
-    <!-- 로그인 입력 폼 -->
-    <main class="form-signin">
-        <form name="loginForm" th:action="@{/members/login}" method="post" onsubmit="return loginCheck()">
-            <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
-
-            <div class="form-floating">
-                <input type="text" name="username" class="form-control" id="username" placeholder="ID" required="required">
-                <label for="username">ID</label>
-            </div>
-            <div class="form-floating">
-                <input type="password" name="password" class="form-control" id="password" placeholder="Password" required="required">
-                <label for="password">Password</label>
-            </div>
-
-            <input type="submit" value="Sign in" class="w-100 btn btn-lg btn-primary">
-        </form>
-    </main>
 </div>
 
 <div th:insert="footer.html" id="footer"></div>
