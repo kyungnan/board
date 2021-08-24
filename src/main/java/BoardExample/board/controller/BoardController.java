@@ -29,7 +29,11 @@ public class BoardController {
 
     // 게시글 전체 목록
     @GetMapping
-    public String list(@ModelAttribute("criteria") Criteria criteria, Model model){
+    public String list(@ModelAttribute("criteria") Criteria criteria, Model model, Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String nameUserDetails = boardMemberMapper.getNameById(userDetails.getUsername());
+        model.addAttribute("nameUserDetails", nameUserDetails);
+
         // 리스트 조회
         List<Board> boardList = boardMapper.getListWithPaging(criteria);
         model.addAttribute("boardList", boardList);
@@ -45,13 +49,13 @@ public class BoardController {
     // 게시글 상세보기
     @GetMapping("/{postno}")
     public String content(@PathVariable int postno, @RequestParam int page, @RequestParam int cntPerPage, Model model, Authentication authentication){
-        Board findPost = boardMapper.getByPostNo(postno);
-        boardMapper.updateCount(postno);
-        model.addAttribute("findPost", findPost);
-
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String nameUserDetails = boardMemberMapper.getNameById(userDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
+
+        Board findPost = boardMapper.getByPostNo(postno);
+        boardMapper.updateCount(postno);
+        model.addAttribute("findPost", findPost);
 
         List<Reply> replyList = boardReplyMapper.getByPostNo(postno);
         model.addAttribute("replyList", replyList);
@@ -67,7 +71,11 @@ public class BoardController {
     
     // 검색 게시글 조회
     @GetMapping("/search")
-    public String searchList(@RequestParam("searchWriter") String searchWriter, @ModelAttribute("criteria") Criteria criteria, Model model){
+    public String searchList(@RequestParam("searchWriter") String searchWriter, @ModelAttribute("criteria") Criteria criteria, Model model, Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String nameUserDetails = boardMemberMapper.getNameById(userDetails.getUsername());
+        model.addAttribute("nameUserDetails", nameUserDetails);
+
         // 리스트 조회
         List<Board> boardList = boardMapper.searchWriter(searchWriter, criteria);
         model.addAttribute("boardList", boardList);
@@ -83,7 +91,10 @@ public class BoardController {
 
     // 글 입력 폼
     @GetMapping("/post")
-    public String postForm(){
+    public String postForm(Authentication authentication, Model model){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String nameUserDetails = boardMemberMapper.getNameById(userDetails.getUsername());
+        model.addAttribute("nameUserDetails", nameUserDetails);
         return "/board/post";
     }
 
@@ -96,7 +107,11 @@ public class BoardController {
 
     // 글 수정 폼
     @GetMapping("/post/{postno}")
-    public String modifyForm(@PathVariable int postno, @RequestParam int page, @RequestParam int cntPerPage, Model model){
+    public String modifyForm(@PathVariable int postno, @RequestParam int page, @RequestParam int cntPerPage, Model model, Authentication authentication){
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String nameUserDetails = boardMemberMapper.getNameById(userDetails.getUsername());
+        model.addAttribute("nameUserDetails", nameUserDetails);
+
         Board findPost = boardMapper.getByPostNo(postno);
         model.addAttribute("findPost",findPost);
 
