@@ -1,5 +1,6 @@
 package BoardExample.board.controller;
 
+import BoardExample.board.config.auth.PrincipalDetails;
 import BoardExample.board.domain.*;
 import BoardExample.board.mapper.BoardMapper;
 import BoardExample.board.mapper.BoardMemberMapper;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,9 +31,8 @@ public class BoardController {
 
     // 게시글 전체 목록
     @GetMapping
-    public String list(@ModelAttribute("criteria") Criteria criteria, Model model, Authentication authentication){
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String nameUserDetails = boardMemberMapper.getNameById(userDetails.getUsername());
+    public String list(@ModelAttribute("criteria") Criteria criteria, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
 
         // 리스트 조회
@@ -48,9 +49,8 @@ public class BoardController {
 
     // 게시글 상세보기
     @GetMapping("/{postno}")
-    public String content(@PathVariable int postno, @RequestParam int page, @RequestParam int cntPerPage, Model model, Authentication authentication){
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String nameUserDetails = boardMemberMapper.getNameById(userDetails.getUsername());
+    public String content(@PathVariable int postno, @RequestParam int page, @RequestParam int cntPerPage, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
 
         Board findPost = boardMapper.getByPostNo(postno);
@@ -71,9 +71,8 @@ public class BoardController {
     
     // 검색 게시글 조회
     @GetMapping("/search")
-    public String searchList(@RequestParam("searchWriter") String searchWriter, @ModelAttribute("criteria") Criteria criteria, Model model, Authentication authentication){
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String nameUserDetails = boardMemberMapper.getNameById(userDetails.getUsername());
+    public String searchList(@RequestParam("searchWriter") String searchWriter, @ModelAttribute("criteria") Criteria criteria, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
 
         // 리스트 조회
@@ -91,25 +90,23 @@ public class BoardController {
 
     // 글 입력 폼
     @GetMapping("/post")
-    public String postForm(Authentication authentication, Model model){
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String nameUserDetails = boardMemberMapper.getNameById(userDetails.getUsername());
+    public String postForm(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model){
+        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
         return "/board/post";
     }
 
     // 글 입력 처리
     @PostMapping("/post")
-    public String post(String subject, String content, Authentication authentication){
-        boardService.createPost(subject, content, authentication);
+    public String post(String subject, String content, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        boardService.createPost(subject, content, principalDetails);
         return "redirect:/board";       //redirect:/ 없이 board/list 하면 글 쓰기 후 리스트 보여줄때 제대로 반영 X
     }
 
     // 글 수정 폼
     @GetMapping("/post/{postno}")
-    public String modifyForm(@PathVariable int postno, @RequestParam int page, @RequestParam int cntPerPage, Model model, Authentication authentication){
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String nameUserDetails = boardMemberMapper.getNameById(userDetails.getUsername());
+    public String modifyForm(@PathVariable int postno, @RequestParam int page, @RequestParam int cntPerPage, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
 
         Board findPost = boardMapper.getByPostNo(postno);
@@ -142,8 +139,8 @@ public class BoardController {
 
     // 댓글 입력 처리
     @PostMapping("/{postno}/reply")
-    public ResponseEntity<String> replySave(@PathVariable int postno, @RequestBody String content_reply, Authentication authentication){
-        boardService.createReply(authentication, postno, content_reply);
+    public ResponseEntity<String> replySave(@PathVariable int postno, @RequestBody String content_reply, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        boardService.createReply(principalDetails, postno, content_reply);
         log.info("## 댓글 등록 ##");
         return new ResponseEntity<>(HttpStatus.OK);
     }

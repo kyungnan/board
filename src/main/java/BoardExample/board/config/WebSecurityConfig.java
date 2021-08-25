@@ -1,5 +1,7 @@
 package BoardExample.board.config;
 
+import BoardExample.board.config.oauth.PrincipalOauth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,7 +13,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    private final PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean
     public BCryptPasswordEncoder encodePassword(){
@@ -29,18 +33,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/board/**", "/members/logout").authenticated()
                 .anyRequest().permitAll()
-                .and()
+            .and()
                 .formLogin()
                 .loginPage("/members/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .loginProcessingUrl("/members/login")
                 .defaultSuccessUrl("/")
-                .and()
+            .and()
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
                 .logoutSuccessUrl("/members/login?logout")
-                .invalidateHttpSession(true);
+                .invalidateHttpSession(true)
+            .and()
+                .oauth2Login()
+                .loginPage("/members/login")
+                .userInfoEndpoint()
+                .userService(principalOauth2UserService);
     }
 
 }

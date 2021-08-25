@@ -19,7 +19,7 @@ ALTER TABLE board CHANGE modidate modidate datetime;
 --board_member 테이블 생성
 CREATE TABLE `board_member` (
 	`id` BIGINT NOT NULL AUTO_INCREMENT,
-	`username` VARCHAR(50) NOT NULL,
+	`username` VARCHAR(100) NOT NULL,
 	`password` VARCHAR(100) NOT NULL,
 	`name` VARCHAR(50) NOT NULL,
 	`email` VARCHAR(50) NOT NULL,
@@ -46,3 +46,8 @@ ENGINE=InnoDB
 
 --board_member 테이블 role 필드 추가
 ALTER TABLE board_member ADD role varcher(50)
+
+--board_member 테이블 provider, providerId 필드 추가
+ALTER TABLE `board_member`
+	ADD COLUMN `provider` VARCHAR(100) NULL DEFAULT NULL AFTER `role`,
+	ADD COLUMN `providerId` VARCHAR(100) NULL DEFAULT NULL AFTER `provider`;

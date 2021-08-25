@@ -1,5 +1,6 @@
 package BoardExample.board.service;
 
+import BoardExample.board.config.auth.PrincipalDetails;
 import BoardExample.board.domain.Board;
 import BoardExample.board.domain.BoardMember;
 import BoardExample.board.domain.Reply;
@@ -9,6 +10,7 @@ import BoardExample.board.mapper.BoardReplyMapper;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +25,8 @@ public class BoardServiceImpl implements BoardService{
     private final BoardMemberMapper boardMemberMapper;
 
     @Override
-    public void createPost(String subject, String content, Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String nameUserDetails = boardMemberMapper.getNameById(userDetails.getUsername());
+    public void createPost(String subject, String content, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
 
         Board post = new Board();
         post.setWriter(nameUserDetails);
@@ -44,9 +45,9 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void createReply(Authentication authentication, int postno, String content_reply) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        BoardMember member = boardMemberMapper.getById(userDetails.getUsername());
+    public void createReply(@AuthenticationPrincipal PrincipalDetails principalDetails, int postno, String content_reply) {
+        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
+        BoardMember member = boardMemberMapper.getById(principalDetails.getUsername());
 
         Reply reply = new Reply();
         reply.setPostno(postno);

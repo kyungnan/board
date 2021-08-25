@@ -42,6 +42,9 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-test'
 	implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5'
 
+	// 스프링 OAuth2 client
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'

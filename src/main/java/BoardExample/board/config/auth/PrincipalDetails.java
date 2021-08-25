@@ -1,21 +1,38 @@
 package BoardExample.board.config.auth;
 
 import BoardExample.board.domain.BoardMember;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
-public class PrincipalDetails implements UserDetails {
+@Data
+public class PrincipalDetails implements UserDetails, OAuth2User {
     private final BoardMember member;
+    private Map<String,Object> attributes;
 
+    //일반 로그인 시 사용
     @Autowired
     public PrincipalDetails(BoardMember member) {
         this.member = member;
     }
 
+    //OAuth 로그인 시 사용
+    @Autowired
+    public PrincipalDetails(BoardMember member, Map<String,Object> attributes) {
+        this.member = member;
+        this.attributes = attributes;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -57,5 +74,10 @@ public class PrincipalDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }

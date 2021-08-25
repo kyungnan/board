@@ -18,8 +18,8 @@
 
     <!-- 회원가입 -->
     <insert id="joinMember">
-        insert into board_member(username, password, name, email)
-        values(#{username},#{password},#{name},#{email})
+        insert into board_member(username, password, name, email, provider, providerId)
+        values(#{username},#{password},#{name},#{email},#{provider},#{providerId})
     </insert>
 
     <!-- ID로 회원이름 조회 -->
