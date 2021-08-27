@@ -1,6 +1,9 @@
 package BoardExample.board.config.oauth;
 
 import BoardExample.board.config.auth.PrincipalDetails;
+import BoardExample.board.config.oauth.provider.GoogleUserAttributes;
+import BoardExample.board.config.oauth.provider.NaverUserAttributes;
+import BoardExample.board.config.oauth.provider.OAuthUserAttributes;
 import BoardExample.board.domain.BoardMember;
 import BoardExample.board.mapper.BoardMemberMapper;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -35,17 +39,24 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
-        String provider = userRequest.getClientRegistration().getClientId();        //google
-        String providerId = oAuth2User.getAttribute("sub");
+        //회원가입
+        OAuthUserAttributes oAuthUserAttributes = null;
+
+        if (userRequest.getClientRegistration().getRegistrationId().equals("google")){
+            oAuthUserAttributes = new GoogleUserAttributes(oAuth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")){
+            oAuthUserAttributes = new NaverUserAttributes((Map<String, Object>) oAuth2User.getAttributes().get("response"));
+        }
+        String provider = oAuthUserAttributes.getProvider();
+        String providerId = oAuthUserAttributes.getProviderId();
         String username = provider+"_"+providerId;
         String password = bCryptPasswordEncoder().encode(UUID.randomUUID().toString());
-        String name = oAuth2User.getAttribute("name");
-        String email = oAuth2User.getAttribute("email");
+        String name = oAuthUserAttributes.getName();
+        String email = oAuthUserAttributes.getEmail();
         String role = "ROLE_USER";
 
         //해당 ID로 회원가입이 되어있는지 확인
         BoardMember member = boardMemberMapper.getById(username);   // google_sub
-
         if(member == null){
             member = BoardMember.builder()
                     .username(username)

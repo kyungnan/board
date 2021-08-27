@@ -35,13 +35,15 @@
                     <input type="password" name="password" class="form-control" id="password" placeholder="Password" required="required">
                     <label for="password">Password</label>
                 </div>
-                <input type="submit" value="Sign in" class="w-100 btn btn-lg btn-primary">
-                <a th:href="@{/members/join}">회원가입</a>
+                <input type="submit" value="Sign in" class="w-100 h-100 btn btn-lg btn-primary">
+                <a th:href="@{/members/join}" id="join_btn">회원가입</a>
                 <div id="oauthLogin">
                     <a href="/oauth2/authorization/google">
                         <img src="/images/google_login_button.png">
                     </a>
-                    <a href="#">네이버아이디로 로그인</a>
+                    <a href="/oauth2/authorization/naver">
+                        <img src="/images/naver_login_button.png">
+                    </a>
                     <a href="https://kauth.kakao.com/oauth/authorize?client_id=5210bdebe7c497838fffe8947527cf9f&redirect_uri=http://localhost:8080/auth/kakao/callback&response_type=code">
                         <img src="/images/kakao_login_button.png">
                     </a>
