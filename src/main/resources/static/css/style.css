@@ -22,3 +22,26 @@
     width: 500px;
     margin: 0 auto;
 }
+
+table #id{
+    width: 112px
+}
+table #subject, table #createDate{
+    width: 320px
+}
+table #writer{
+    width: 200px;
+}
+table #cnt{
+    width: 150px;
+}
+#join_btn{
+    display: block;
+    margin: 10px auto;
+    text-align: center;
+    text-decoration: none;
+}
+#oauthLogin a img{
+    display: block;
+    margin: 10px auto;
+ }

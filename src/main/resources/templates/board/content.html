@@ -14,6 +14,7 @@
     <div th:insert="header.html" id="header"></div>
 
     <div id="container">
+        <!-- 게시글 상세보기 -->
         <table class="table table-bordered border-primary">
             <tr>
                 <td colspan="3"><div th:text="${findPost.subject}"></div></td>
@@ -75,12 +76,16 @@
             <div class="card-header">댓글 리스트</div>
                 <ul id="reply-box" class="list-group">
                     <form>
-                        <li id="reply" class="list-group-item d-flex justify-content-between" th:each="reply:${replyList}">
-                            <input type="hidden" id="page_del" th:value="${pageMaker.criteria.page}">
-                            <input type="hidden" id="cntPerPage_del" th:value="${pageMaker.criteria.cntPerPage}">
-                            <div th:text="${reply.content_reply}">댓글 내용입니다!!</div>
-                            <div class="d-flex">
-                                <div class="font-italic" th:text="${reply.name}"></div>&nbsp;
+                        <li th:id="'reply_'+${reply.id_reply}" class="list-group-item d-flex justify-content-between" th:each="reply:${replyList}">
+                            <input type="hidden" id="id_reply" th:value="${reply.id_reply}">
+                            <input type="hidden" id="select_page" th:value="${pageMaker.criteria.page}">
+                            <input type="hidden" id="select_cntPerPage" th:value="${pageMaker.criteria.cntPerPage}">
+                            <div>
+                                <label>작성자: <span th:text="${reply.name}"></span></label>
+                                <div th:text="${reply.content_reply}"></div>
+                            </div>
+                            <div>
+                                <button>답글</button>
                                 <button type="button" th:attr="onclick=|replyDelete('${reply.postno}', '${reply.id_reply}')|"
                                         th:disabled="${!nameUserDetails.equals(reply.name)}">삭제</button>
                             </div>
