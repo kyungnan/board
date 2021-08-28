@@ -11,6 +11,8 @@
     <div th:insert="header.html" id="header"></div>
 
     <div id="container">
+        <!-- 총 게시글 -->
+        <p>총 게시글: <span th:text="${totalCnt}"></span></p>
 
         <!-- 검색 기능 -->
         <form th:action="@{/board/search}" method="get" id="searchForm">
@@ -25,11 +27,11 @@
         <table class="table">
             <thead class="table-light">
             <tr>
-                <th>번호</th>
-                <th>제목</th>
-                <th>작성자</th>
-                <th>작성일</th>
-                <th>조회수</th>
+                <th id="no">번호</th>
+                <th id="subject">제목</th>
+                <th id="writer">작성자</th>
+                <th id="createDate">작성일</th>
+                <th id="cnt">조회수</th>
             </tr>
             </thead>
             <tbody>

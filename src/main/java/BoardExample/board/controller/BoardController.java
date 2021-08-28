@@ -35,6 +35,10 @@ public class BoardController {
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
 
+        // 총 게시글 수
+        int totalCnt = boardMapper.getTotalCnt();
+        model.addAttribute("totalCnt", totalCnt);
+
         // 리스트 조회
         List<Board> boardList = boardMapper.getListWithPaging(criteria);
         model.addAttribute("boardList", boardList);
