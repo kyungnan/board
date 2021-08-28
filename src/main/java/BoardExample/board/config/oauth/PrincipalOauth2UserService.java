@@ -2,6 +2,7 @@ package BoardExample.board.config.oauth;
 
 import BoardExample.board.config.auth.PrincipalDetails;
 import BoardExample.board.config.oauth.provider.GoogleUserAttributes;
+import BoardExample.board.config.oauth.provider.KakaoUserAttributes;
 import BoardExample.board.config.oauth.provider.NaverUserAttributes;
 import BoardExample.board.config.oauth.provider.OAuthUserAttributes;
 import BoardExample.board.domain.BoardMember;
@@ -46,6 +47,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             oAuthUserAttributes = new GoogleUserAttributes(oAuth2User.getAttributes());
         } else if (userRequest.getClientRegistration().getRegistrationId().equals("naver")){
             oAuthUserAttributes = new NaverUserAttributes((Map<String, Object>) oAuth2User.getAttributes().get("response"));
+        } else if (userRequest.getClientRegistration().getRegistrationId().equals("kakao")){
+            oAuthUserAttributes = new KakaoUserAttributes((java.util.Map<String, Object>) oAuth2User.getAttributes());
         }
         String provider = oAuthUserAttributes.getProvider();
         String providerId = oAuthUserAttributes.getProviderId();
