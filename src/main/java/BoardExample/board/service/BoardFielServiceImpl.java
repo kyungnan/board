@@ -62,4 +62,5 @@ public class BoardFielServiceImpl implements BoardFileService{
         file.setFile_size(multipartFile.getSize());
         boardFileMapper.uploadFile(file);
     }
+
 }

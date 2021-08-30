@@ -11,16 +11,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -110,7 +105,11 @@ public class BoardController {
     @PostMapping("/post")
     public String post(Board insertPost, @AuthenticationPrincipal PrincipalDetails principalDetails,
                        @RequestParam(value = "file", required = false)MultipartFile multipartFile){
-        boardService.createPost(insertPost, principalDetails, multipartFile);
+            boardService.createPost(insertPost, principalDetails);
+
+            if (!multipartFile.isEmpty()){
+                boardService.createPost(insertPost, principalDetails);
+            }
         return "redirect:/board";       //redirect:/ 없이 board/list 하면 글 쓰기 후 리스트 보여줄때 제대로 반영 X
     }
 

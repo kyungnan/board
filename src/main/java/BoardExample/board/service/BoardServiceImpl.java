@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 
@@ -27,8 +26,7 @@ public class BoardServiceImpl implements BoardService{
     private final BoardFileService boardFileService;
 
     @Override
-    public void createPost(Board post, @AuthenticationPrincipal PrincipalDetails principalDetails,
-                           MultipartFile multipartFile) {
+    public void createPost(Board post, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
 
         post.setWriter(nameUserDetails);
@@ -36,7 +34,6 @@ public class BoardServiceImpl implements BoardService{
         post.setModidate(new Timestamp(System.currentTimeMillis()));
 
         boardMapper.createPost(post);
-        boardFileService.uploadFile(post,multipartFile);
     }
 
     @Override
