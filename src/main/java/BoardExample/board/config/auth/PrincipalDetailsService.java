@@ -17,12 +17,12 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("## " + username + " ##");
         BoardMember findMember = boardMemberMapper.getById(username);
 
-        if(findMember != null){
-            return new PrincipalDetails(findMember);
+        if(findMember == null){
+            throw new UsernameNotFoundException(username);
         }
-        return null;
+
+        return new PrincipalDetails(findMember);
     }
 }

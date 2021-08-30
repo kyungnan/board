@@ -1,15 +1,16 @@
 package BoardExample.board.config;
 
+import BoardExample.board.config.auth.PrincipalDetailsService;
 import BoardExample.board.config.oauth.PrincipalOauth2UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -17,16 +18,14 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final PrincipalOauth2UserService principalOauth2UserService;
-
-    @Bean
-    public BCryptPasswordEncoder encodePassword(){
-        return new BCryptPasswordEncoder();
-    }
+    private final PrincipalDetailsService principalDetailsService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
         auth.inMemoryAuthentication()
-                .withUser("user").password("{bcrypt}password").roles("USER");
+                .withUser("spring").password(encoder.encode("secret")).roles("USER");
+        auth.userDetailsService(principalDetailsService);
     }
 
     @Override
@@ -43,8 +42,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .formLogin()
                 .loginPage("/members/login")
-                .usernameParameter("username")
-                .passwordParameter("password")
                 .loginProcessingUrl("/members/login")
                 .defaultSuccessUrl("/")
             .and()
