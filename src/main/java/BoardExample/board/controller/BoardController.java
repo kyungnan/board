@@ -5,6 +5,7 @@ import BoardExample.board.domain.*;
 import BoardExample.board.mapper.BoardMapper;
 import BoardExample.board.mapper.BoardMemberMapper;
 import BoardExample.board.mapper.BoardReplyMapper;
+import BoardExample.board.service.BoardFileService;
 import BoardExample.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -28,6 +33,7 @@ public class BoardController {
     private final BoardMapper boardMapper;
     private final BoardReplyMapper boardReplyMapper;
     private final BoardMemberMapper boardMemberMapper;
+    private final BoardFileService boardFileService;
 
     // 게시글 전체 목록
     @GetMapping
@@ -102,8 +108,9 @@ public class BoardController {
 
     // 글 입력 처리
     @PostMapping("/post")
-    public String post(String subject, String content, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        boardService.createPost(subject, content, principalDetails);
+    public String post(Board insertPost, @AuthenticationPrincipal PrincipalDetails principalDetails,
+                       @RequestParam(value = "file", required = false)MultipartFile multipartFile){
+        boardService.createPost(insertPost, principalDetails, multipartFile);
         return "redirect:/board";       //redirect:/ 없이 board/list 하면 글 쓰기 후 리스트 보여줄때 제대로 반영 X
     }
 

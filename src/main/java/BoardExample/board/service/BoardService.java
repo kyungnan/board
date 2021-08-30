@@ -2,12 +2,13 @@ package BoardExample.board.service;
 
 import BoardExample.board.config.auth.PrincipalDetails;
 import BoardExample.board.domain.Board;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface BoardService {
 
-    void createPost(String subject, String content, @AuthenticationPrincipal PrincipalDetails principalDetails);
+    void createPost(Board post, @AuthenticationPrincipal PrincipalDetails principalDetails,
+                    MultipartFile multipartFile);
 
     void updatePost(Board post, Board updatePost);
 

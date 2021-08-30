@@ -11,7 +11,7 @@
     <div th:insert="header.html" id="header"></div>
 
     <div id="container">
-        <form th:action="@{/board/post}" method="post">
+        <form th:action="@{/board/post}" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="subject" class="form-label">제목</label>
                 <input type="text" class="form-control" name="subject" id="subject" maxlength="50">
@@ -22,8 +22,16 @@
                 <textarea class="form-control" name="content" id="content" rows="10"></textarea>
             </div>
 
+<!--            <div class="mailbox-attachments clearfix uploadedList">-->
+<!--                <input type="file" name="files">-->
+<!--            </div>-->
+
+            <div class="form-group row">
+                <input type="file" id="file" name="file" multiple="multiple">
+            </div>
+
             <div>
-                <input type="submit" value="등록" class="btn btn-outline-dark">
+                <input type="submit" id="submit" value="등록" class="btn btn-outline-dark">
                 <input type="reset" value="다시쓰기" class="btn btn-outline-dark">
                 <input type="button" value="목록보기" th:onclick="location.href='/board'" class="btn btn-outline-dark">
             </div>
