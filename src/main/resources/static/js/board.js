@@ -29,8 +29,8 @@ $(function() {
 
 function replyDelete(postno, id_reply){
     //alert('reply delete function');
-    let page_del = $("#page_del").val();
-    let cntPerPage_del = $("#cntPerPage_del").val();
+    let page_del = $("#select_page").val();
+    let cntPerPage_del = $("#select_cntPerPage").val();
     $.ajax({
         type:"DELETE",
         url:`/board/${postno}/reply/${id_reply}`,
