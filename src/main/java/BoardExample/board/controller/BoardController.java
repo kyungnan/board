@@ -16,7 +16,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 @Controller
 @RequestMapping("/board")
@@ -104,12 +110,23 @@ public class BoardController {
     // 글 입력 처리
     @PostMapping("/post")
     public String post(Board insertPost, @AuthenticationPrincipal PrincipalDetails principalDetails,
-                       @RequestParam(value = "file", required = false)MultipartFile multipartFile){
-            boardService.createPost(insertPost, principalDetails);
+                       @RequestParam(value = "file", required = false)MultipartFile multipartFile,
+                       @RequestParam(value = "file", required = false)MultipartFile[] multipartFiles){
 
-            if (!multipartFile.isEmpty()){
+        boardService.createPost(insertPost, principalDetails);
+
+        if (!multipartFile.isEmpty()){
+
+            if (multipartFiles.length == 1){
+                log.info("단일 파일 첨부");
                 boardFileService.uploadFile(insertPost, multipartFile);
             }
+            else {
+                log.info("다중 파일 첨부");
+                boardFileService.uploadFiles(insertPost, multipartFiles);
+            }
+        }
+
         return "redirect:/board";       //redirect:/ 없이 board/list 하면 글 쓰기 후 리스트 보여줄때 제대로 반영 X
     }
 

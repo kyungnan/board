@@ -17,7 +17,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class BoardFielServiceImpl implements BoardFileService{
@@ -38,7 +41,7 @@ public class BoardFielServiceImpl implements BoardFileService{
     }
 
     @Override
-    public void uploadFile(Board post, MultipartFile multipartFile) {
+    public File uploadFile(Board post, MultipartFile multipartFile) {
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
         Path targetLocation = this.fileLocation.resolve(fileName);
         try {
@@ -61,6 +64,17 @@ public class BoardFielServiceImpl implements BoardFileService{
         file.setFile_type(multipartFile.getContentType());
         file.setFile_size(multipartFile.getSize());
         boardFileMapper.uploadFile(file);
+
+        return file;
     }
+
+    @Override
+    public List<File> uploadFiles(Board post, MultipartFile[] multipartFiles) {
+        return Arrays.asList(multipartFiles)
+                .stream()
+                .map(file -> uploadFile(post, file))
+                .collect(Collectors.toList());
+    }
+
 
 }
