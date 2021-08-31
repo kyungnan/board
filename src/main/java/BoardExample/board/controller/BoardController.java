@@ -108,7 +108,7 @@ public class BoardController {
             boardService.createPost(insertPost, principalDetails);
 
             if (!multipartFile.isEmpty()){
-                boardService.createPost(insertPost, principalDetails);
+                boardFileService.uploadFile(insertPost, multipartFile);
             }
         return "redirect:/board";       //redirect:/ 없이 board/list 하면 글 쓰기 후 리스트 보여줄때 제대로 반영 X
     }
