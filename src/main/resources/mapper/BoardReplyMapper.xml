@@ -21,4 +21,18 @@
         DELETE FROM board_reply
         WHERE id_reply=#{id_reply}
     </delete>
+
+    <!-- 댓글 수정 -->
+    <update id="updateReply">
+        update board_reply
+        set content_reply=#{content_reply}
+        where id_reply=#{id_reply}
+    </update>
+
+    <!-- 댓글 ID로 조회 -->
+    <select id="getById_reply" resultType="BoardExample.board.domain.Reply">
+        select *
+        from board_reply
+        where id_reply=#{id_reply}
+    </select>
 </mapper>

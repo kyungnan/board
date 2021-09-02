@@ -52,6 +52,38 @@ function replyDelete(postno, id_reply){
         });
     }
 }
+
+<!-- 댓글 수정 이벤트 -->
+$(function() {
+    $("#btn_reply_update").click(function(){
+        return replyUpdate();
+    });
+
+    let postno = $("#postno_update").val();
+    let page = $("#page_update").val();
+    let cntPerPage = $("#cntPerPage_update").val();
+    let id_reply = $("#id_reply_update").val();
+
+    function replyUpdate(){
+        let data = {
+            content:$("#content_reply_update").val()
+        };
+
+        $.ajax({
+            type:"PUT",
+            url:`/board/${postno}/reply/${id_reply}`,
+            data:data.content,
+            contentType: "application/json; charset=utf-8;",
+            dataType:"text"
+        }).done(function(resp){
+        alert("댓글 수정이 완료되었습니다.");
+        location.href=`/board/${postno}?page=${page}&cntPerPage=${cntPerPage}`;
+        }).fail(function(error){
+        alert(JSON.stringify(error));
+        });
+    }
+});
+
 <!-- 첨부파일 삭제 이벤트 -->
 function attachDelete(f_postno, f_id){
     var del_confiem = confirm("삭제하시겠습니까?");

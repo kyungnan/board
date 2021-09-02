@@ -55,4 +55,11 @@ public class BoardServiceImpl implements BoardService{
         reply.setContent_reply(content_reply);
         boardReplyMapper.createReply(reply);
     }
+
+    @Override
+    public void updateReply(int id_reply, int postno, String content_reply) {
+        Reply reply = boardReplyMapper.getById_reply(id_reply);
+        reply.setContent_reply(content_reply);
+        boardReplyMapper.updateReply(reply);
+    }
 }

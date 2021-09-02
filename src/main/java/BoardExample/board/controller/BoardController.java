@@ -62,7 +62,9 @@ public class BoardController {
 
     // 게시글 상세보기
     @GetMapping("/{postno}")
-    public String content(@PathVariable int postno, @RequestParam int page, @RequestParam int cntPerPage, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public String content(@PathVariable int postno, @RequestParam("page") int page, @RequestParam("cntPerPage") int cntPerPage,
+                          @RequestParam(value = "flag", required = false) String flag, @RequestParam(value = "id_reply", required = false, defaultValue = "0") int id_reply,
+                          Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
 
@@ -85,6 +87,12 @@ public class BoardController {
         PageMaker pageMaker = new PageMaker();
         pageMaker.setCriteria(criteria);
         model.addAttribute("pageMaker", pageMaker);
+
+        if (flag != null){
+            model.addAttribute("flag", flag);
+            model.addAttribute("id_reply", id_reply);
+        }
+
         return "board/content";
     }
     
@@ -203,6 +211,25 @@ public class BoardController {
     public ResponseEntity<String> replyDelete(@PathVariable("id_reply") int id_reply){
         boardReplyMapper.deleteReply(id_reply);
         log.info("댓글 삭제 완료");
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 댓글 수정 폼
+    @GetMapping("/{postno}/reply/{id_reply}")
+    public String replyUpdateForm(@PathVariable("postno") int postno, @PathVariable("id_reply") int id_reply,
+                                  @RequestParam("page") int page, @RequestParam("cntPerPage") int cntPerPage){
+        log.info("수정버튼 클릭하여 댓글 수정 폼 요청");
+        log.info("id_reply" + id_reply);
+        return "redirect:/board/{postno}" + "?id_reply=" + id_reply + "&flag=true"
+                + "&page=" + page + "&cntPerPage=" + cntPerPage;
+    }
+
+    // 댓글 수정 처리
+    @PutMapping("/{postno}/reply/{id_reply}")
+    public ResponseEntity<String> replyUpdate(@PathVariable("postno") int postno, @PathVariable("id_reply") int id_reply,@RequestBody String content_reply,
+                                              @AuthenticationPrincipal PrincipalDetails principalDetails){
+        boardService.updateReply(id_reply, postno, content_reply);
+        log.info("댓글 수정 완료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

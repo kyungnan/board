@@ -16,4 +16,10 @@ public interface BoardReplyMapper {
 
     // 댓글 삭제
     void deleteReply(int id_reply);
+
+    // 댓글 수정
+    void updateReply(Reply reply);
+
+    // 댓글 ID로 조회
+    Reply getById_reply(@Param("id_reply") int id_reply);
 }

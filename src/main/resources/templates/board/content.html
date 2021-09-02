@@ -99,18 +99,38 @@
             </div>
                 <ul id="reply-box" class="list-group">
                     <form>
-                        <li th:id="'reply_'+${reply.id_reply}" class="list-group-item d-flex justify-content-between" th:each="reply:${replyList}">
+                        <li class="list-group-item" th:each="reply:${replyList}">
                             <input type="hidden" id="id_reply" th:value="${reply.id_reply}">
                             <input type="hidden" id="select_page" th:value="${pageMaker.criteria.page}">
                             <input type="hidden" id="select_cntPerPage" th:value="${pageMaker.criteria.cntPerPage}">
-                            <div>
-                                <label>작성자: <span th:text="${reply.name}"></span></label>
-                                <div th:text="${reply.content_reply}"></div>
+                            <!--댓글 수정 폼-->
+                            <div th:if="${#strings.equals(flag, 'true') && id_reply == reply.id_reply}">
+                                <form>
+                                    <input type="hidden" id="postno_update" th:value="${findPost.postno}">
+                                    <input type="hidden" id="page_update" th:value="${pageMaker.criteria.page}">
+                                    <input type="hidden" id="cntPerPage_update" th:value="${pageMaker.criteria.cntPerPage}">
+                                    <input type="hidden" id="id_reply_update" th:value="${reply.id_reply}">
+                                    <div class="card-body">
+                                        <textarea id="content_reply_update" class="form-control" rows="1">[[${reply.content_reply}]]</textarea>
+                                    </div>
+                                    <div class="card-footer">
+                                        <button type="button" class="btn btn-outline-dark" id="btn_reply_update">수정완료</button>
+                                    </div>
+                                </form>
                             </div>
-                            <div>
-                                <button>답글</button>
-                                <button type="button" th:attr="onclick=|replyDelete('${reply.postno}', '${reply.id_reply}')|"
-                                        th:disabled="${!nameUserDetails.equals(reply.name)}">삭제</button>
+
+                            <!--댓글-->
+                            <div th:unless="${#strings.equals(flag, 'true') && id_reply == reply.id_reply}" class="d-flex justify-content-between">
+                                <div>
+                                    <label>작성자: <span th:text="${reply.name}"></span></label>
+                                    <div th:text="${reply.content_reply}"></div>
+                                </div>
+                                <div th:if="${nameUserDetails.equals(reply.name)}">
+                                    <button type="button" th:disabled="${!nameUserDetails.equals(reply.name)}"
+                                            th:onclick="|location.href='@{|/board/${reply.postno}/reply/${reply.id_reply}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|">수정</button>
+                                    <button type="button" th:attr="onclick=|replyDelete('${reply.postno}', '${reply.id_reply}')|"
+                                            th:disabled="${!nameUserDetails.equals(reply.name)}">삭제</button>
+                                </div>
                             </div>
                         </li>
                     </form>
