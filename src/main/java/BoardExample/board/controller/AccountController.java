@@ -32,7 +32,7 @@ public class AccountController {
 
     @PostMapping("/join")
     public String join(BoardMember member, Model model){
-        log.info("## " +  member + " ##");
+        log.info("## join ::: " +  member + " ##");
         int result = boardMemberService.join(member);
 
         if (result == -1){

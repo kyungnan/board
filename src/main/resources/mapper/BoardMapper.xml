@@ -3,7 +3,7 @@
 <mapper namespace="BoardExample.board.mapper.BoardMapper">
 
     <!-- 게시글 등록 -->
-    <insert id="createPost">
+    <insert id="createPost" useGeneratedKeys="true" keyProperty="postno">
         insert into board (subject, content, writer, regdate, modidate, count)
         values(#{subject},#{content},#{writer},#{regdate},#{modidate},#{count})
     </insert>
@@ -82,4 +82,5 @@
         from board
         where writer like concat('%',#{writer},'%')
     </select>
+
 </mapper>

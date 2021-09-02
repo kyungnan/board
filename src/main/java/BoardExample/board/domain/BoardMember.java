@@ -2,8 +2,10 @@ package BoardExample.board.domain;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class BoardMember {
     private int id;                 //회원번호
     private String username;        //아이디

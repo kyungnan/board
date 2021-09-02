@@ -1,5 +1,5 @@
 #container{
-    height:600px;
+    height:auto;
     width: 80%;
     margin: 100px auto;
 }
@@ -22,18 +22,21 @@
     width: 500px;
     margin: 0 auto;
 }
-
-table #id{
-    width: 112px
+<!--테이블 너비-->
+th#no{
+    width: 50px
 }
-table #subject, table #createDate{
-    width: 320px
+th#subject{
+    width: 500px
 }
-table #writer{
+th#writer{
     width: 200px;
 }
-table #cnt{
-    width: 150px;
+th#createDate{
+    width: 240px;
+}
+th#cnt{
+    width: 100px;
 }
 #join_btn{
     display: block;
@@ -45,3 +48,9 @@ table #cnt{
     display: block;
     margin: 10px auto;
  }
+ ul{
+    list-style: none;
+ }
+#attach_list{
+    list-style-image: url("/images/attach_file_icon.png");
+}
