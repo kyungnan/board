@@ -3,15 +3,19 @@ package BoardExample.board.service;
 import BoardExample.board.config.FileUploadProperties;
 import BoardExample.board.domain.Board;
 import BoardExample.board.domain.File;
+import BoardExample.board.exception.FileDownloadException;
 import BoardExample.board.exception.FileUploadException;
 import BoardExample.board.mapper.BoardFileMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -76,5 +80,22 @@ public class BoardFielServiceImpl implements BoardFileService{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Resource downloadFile(String fileName) {
+
+        try {
+            Path filePath = this.fileLocation.resolve(fileName).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if(resource.exists()){
+                return resource;
+            } else {
+                throw new FileDownloadException(fileName+" 파일을 찾을 수 없습니다.");
+            }
+        } catch (MalformedURLException e) {
+            throw new FileDownloadException(fileName+" 파일을 찾을 수 없습니다.", e);
+        }
+
+    }
 
 }

@@ -10,13 +10,19 @@ import BoardExample.board.service.BoardFileService;
 import BoardExample.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -206,5 +212,27 @@ public class BoardController {
         boardFileMapper.deleteFile(f_id);
         log.info("첨부파일 삭제 완료");
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 첨부파일 다운로드
+    @GetMapping("/downloadFile/{fileName}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request){
+        Resource resource = boardFileService.downloadFile(fileName);
+
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            log.info("Could not determine file type.");
+        }
+
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
 }
