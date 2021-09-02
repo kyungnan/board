@@ -8,4 +8,17 @@
         values(#{f_postno},#{file_origin_name},#{file_name},#{file_path},#{file_type},#{file_size},#{reg_date},#{delete_yn})
     </insert>
 
+    <!-- 게시글에 첨부된 파일정보 조회 -->
+    <select id="getByPostno" resultType="BoardExample.board.domain.File">
+        select f_id, f_postno, file_origin_name, round(file_size/1000, 1) as file_size
+        from attach_file
+        where f_postno=#{f_postno};
+    </select>
+
+    <!-- 게시글 수정 시 첨부파일 삭제 -->
+    <delete id="deleteFile">
+        DELETE FROM attach_file
+        WHERE f_id=#{f_id}
+    </delete>
+
 </mapper>

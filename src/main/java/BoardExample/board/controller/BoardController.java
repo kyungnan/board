@@ -2,6 +2,7 @@ package BoardExample.board.controller;
 
 import BoardExample.board.config.auth.PrincipalDetails;
 import BoardExample.board.domain.*;
+import BoardExample.board.mapper.BoardFileMapper;
 import BoardExample.board.mapper.BoardMapper;
 import BoardExample.board.mapper.BoardMemberMapper;
 import BoardExample.board.mapper.BoardReplyMapper;
@@ -16,13 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.function.Predicate;
 
 @Controller
 @RequestMapping("/board")
@@ -35,6 +30,7 @@ public class BoardController {
     private final BoardReplyMapper boardReplyMapper;
     private final BoardMemberMapper boardMemberMapper;
     private final BoardFileService boardFileService;
+    private final BoardFileMapper boardFileMapper;
 
     // 게시글 전체 목록
     @GetMapping
@@ -63,6 +59,12 @@ public class BoardController {
     public String content(@PathVariable int postno, @RequestParam int page, @RequestParam int cntPerPage, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
+
+        List<File> fileList = boardFileMapper.getByPostno(postno);
+        for (File file:fileList){
+            log.info(file.getFile_origin_name());
+        };
+        model.addAttribute("fileList", fileList);
 
         Board findPost = boardMapper.getByPostNo(postno);
         boardMapper.updateCount(postno);
@@ -136,6 +138,9 @@ public class BoardController {
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
 
+        List<File> fileList = boardFileMapper.getByPostno(postno);
+        model.addAttribute("fileList", fileList);
+
         Board findPost = boardMapper.getByPostNo(postno);
         model.addAttribute("findPost",findPost);
 
@@ -151,9 +156,24 @@ public class BoardController {
 
     // 글 수정 처리
     @PutMapping("/{postno}")
-    public String modify(@PathVariable("postno") int postno, @RequestParam int page, @RequestParam int cntPerPage, Board updatePost){
+    public String modify(@PathVariable("postno") int postno, @RequestParam("page") int page, @RequestParam("cntPerPage") int cntPerPage,
+                         @RequestParam(value = "file", required = false) MultipartFile multipartFile,
+                         @RequestParam(value = "file", required = false) MultipartFile[] multipartFiles,
+                         Board updatePost){
         Board post = boardMapper.getByPostNo(postno);
         boardService.updatePost(post, updatePost);
+
+        if (!multipartFile.isEmpty()){
+
+            if (multipartFiles.length == 1){
+                log.info("단일 파일 첨부");
+                boardFileService.uploadFile(post, multipartFile);
+            }
+            else {
+                log.info("다중 파일 첨부");
+                boardFileService.uploadFiles(post, multipartFiles);
+            }
+        }
         return "redirect:/board" + "?page=" + page + "&cntPerPage=" + cntPerPage;
     }
 
@@ -168,7 +188,7 @@ public class BoardController {
     @PostMapping("/{postno}/reply")
     public ResponseEntity<String> replySave(@PathVariable int postno, @RequestBody String content_reply, @AuthenticationPrincipal PrincipalDetails principalDetails){
         boardService.createReply(principalDetails, postno, content_reply);
-        log.info("## 댓글 등록 ##");
+        log.info("댓글 등록 완료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -176,7 +196,15 @@ public class BoardController {
     @DeleteMapping("/{postno}/reply/{id_reply}")
     public ResponseEntity<String> replyDelete(@PathVariable("id_reply") int id_reply){
         boardReplyMapper.deleteReply(id_reply);
-        log.info("## 댓글 삭제 ##");
+        log.info("댓글 삭제 완료");
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 첨부파일 삭제 처리
+    @DeleteMapping("/{postno}/attach/{f_id}")
+    public ResponseEntity<String> attachDelete(@PathVariable("f_id") int f_id){
+        boardFileMapper.deleteFile(f_id);
+        log.info("첨부파일 삭제 완료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

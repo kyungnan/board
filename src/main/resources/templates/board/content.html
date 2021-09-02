@@ -26,8 +26,29 @@
                 <td>조회수: <span th:text="${findPost.count}"></span></td>
             </tr>
 
+            <!--첨부파일 리스트-->
             <tr>
                 <td colspan="3">
+                    <div th:if="${!fileList.isEmpty()}" class="p-2 border ml-auto mb-5">
+                        <span>첨부파일: </span>
+                        <div th:each="file : ${fileList}">
+                            <ul>
+                                <li id="attach_list" class="d-flex justify-content-between">
+                                    <div>
+                                        <span th:text="${file.file_origin_name}"></span>
+                                        <label><span th:text="${file.file_size}"></span> KB</label>
+                                    </div>
+                                    <form>
+                                        <input type="hidden" id="select_page_del" th:value="${pageMaker.criteria.page}">
+                                        <input type="hidden" id="select_cntPerPage_del" th:value="${pageMaker.criteria.cntPerPage}">
+                                        <button type="button" th:if="${nameUserDetails.equals(findPost.writer)}"
+                                                th:attr="onclick=|attachDelete('${file.f_postno}', '${file.f_id}')|">파일삭제</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                     <pre><div th:text="${findPost.content}"></div></pre>
                 </td>
             </tr>
@@ -54,7 +75,7 @@
 
         <!--댓글 작성-->
         <div class="card-header bg-light">
-            <i class="fa fa-comment fa"></i>댓글
+            <h5 class="m-0 font-weight-bold text-secondary">Relpy</h5>
         </div>
         <div class="card">
             <form>
@@ -72,8 +93,10 @@
         <br>
 
         <!--댓글 리스트-->
-        <div class="card">
-            <div class="card-header">댓글 리스트</div>
+        <div class="card mb-5">
+            <div class="card-header">
+                <h5 class="m-0 font-weight-bold text-secondary">Relpy List</h5>
+            </div>
                 <ul id="reply-box" class="list-group">
                     <form>
                         <li th:id="'reply_'+${reply.id_reply}" class="list-group-item d-flex justify-content-between" th:each="reply:${replyList}">
