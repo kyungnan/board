@@ -2,7 +2,10 @@ package BoardExample.board.service;
 
 import BoardExample.board.config.auth.PrincipalDetails;
 import BoardExample.board.domain.Board;
+import BoardExample.board.domain.Reply;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+import java.util.List;
 
 public interface BoardService {
 
@@ -10,7 +13,11 @@ public interface BoardService {
 
     void updatePost(Board post, Board updatePost);
 
+    List<Reply> getReply(int postno);
+
     void createReply(@AuthenticationPrincipal PrincipalDetails principalDetails, int postno, String content_reply);
 
     void updateReply(int id_reply, int postno, String content_reply);
+
+    void createReReply(@AuthenticationPrincipal PrincipalDetails principalDetails, int postno, int id_reply, String content_reply);
 }

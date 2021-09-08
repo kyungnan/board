@@ -22,4 +22,7 @@ public interface BoardReplyMapper {
 
     // 댓글 ID로 조회
     Reply getById_reply(@Param("id_reply") int id_reply);
+
+    // 대댓글 작성
+    void createReReply(Reply reply);
 }

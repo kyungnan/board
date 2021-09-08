@@ -63,7 +63,8 @@ public class BoardController {
     // 게시글 상세보기
     @GetMapping("/{postno}")
     public String content(@PathVariable int postno, @RequestParam("page") int page, @RequestParam("cntPerPage") int cntPerPage,
-                          @RequestParam(value = "flag", required = false) String flag, @RequestParam(value = "id_reply", required = false, defaultValue = "0") int id_reply,
+                          @RequestParam(value = "flag", required = false) String flag, @RequestParam(value = "flagReReply", required = false) String flagReReply,
+                          @RequestParam(value = "id_reply", required = false, defaultValue = "0") int id_reply,
                           Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
@@ -78,7 +79,7 @@ public class BoardController {
         boardMapper.updateCount(postno);
         model.addAttribute("findPost", findPost);
 
-        List<Reply> replyList = boardReplyMapper.getByPostNo(postno);
+        List<Reply> replyList = boardService.getReply(postno);
         model.addAttribute("replyList", replyList);
 
         Criteria criteria = new Criteria();
@@ -90,6 +91,11 @@ public class BoardController {
 
         if (flag != null){
             model.addAttribute("flag", flag);
+            model.addAttribute("id_reply", id_reply);
+        }
+
+        if (flagReReply != null){
+            model.addAttribute("flagReReply", true);
             model.addAttribute("id_reply", id_reply);
         }
 
@@ -230,6 +236,25 @@ public class BoardController {
                                               @AuthenticationPrincipal PrincipalDetails principalDetails){
         boardService.updateReply(id_reply, postno, content_reply);
         log.info("댓글 수정 완료");
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // 대댓글 입력 폼
+    @GetMapping("/{postno}/{id_reply}")
+    public String replyInsertForm(@PathVariable("postno") int postno, @PathVariable("id_reply") int id_reply,
+                                  @RequestParam("page") int page, @RequestParam("cntPerPage") int cntPerPage){
+        log.info("답글버튼 클릭하여 답글 입력 폼 요청");
+        log.info("id_reply" + id_reply);
+        return "redirect:/board/{postno}" + "?id_reply=" + id_reply + "&flagReReply=true"
+                + "&page=" + page + "&cntPerPage=" + cntPerPage;
+    }
+
+    // 대댓글 처리
+    @PostMapping("/{postno}/{id_reply}")
+    public ResponseEntity<String> re_replyCreate(@PathVariable("postno") int postno, @PathVariable("id_reply") int id_reply,@RequestBody String content_reply,
+                                              @AuthenticationPrincipal PrincipalDetails principalDetails){
+        boardService.createReReply(principalDetails, postno, id_reply, content_reply);
+        log.info("대댓글 등록 완료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

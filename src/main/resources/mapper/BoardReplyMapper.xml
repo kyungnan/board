@@ -7,7 +7,7 @@
         SELECT r.*, m.name
         FROM board_member m join board_reply r
         WHERE m.id = r.id_member AND r.postno = #{postno}
-        ORDER BY r.id_reply DESC;
+        ORDER BY r.id_reply ASC;
     </select>
 
     <!-- 댓글 작성 -->
@@ -35,4 +35,10 @@
         from board_reply
         where id_reply=#{id_reply}
     </select>
+
+    <!-- 대댓글 작성 -->
+    <insert id="createReReply">
+        insert into board_reply(content_reply, postno, id_member, reg_date, parent_id, depth)
+        values(#{content_reply},#{postno},#{id_member},#{reg_date},#{parent_id},#{depth})
+    </insert>
 </mapper>

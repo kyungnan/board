@@ -12,4 +12,6 @@ public class Reply {
     private int id_member;
     private Timestamp reg_date;
     private String name;
+    private int parent_id;
+    private int depth;
 }

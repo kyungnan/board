@@ -14,6 +14,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -44,6 +46,35 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
+    public List<Reply> getReply(int postno) {
+        List<Reply> replyList = boardReplyMapper.getByPostNo(postno);
+
+        List<Reply> parentReplyList = new ArrayList<>();
+        List<Reply> childReplyList = new ArrayList<>();
+        List<Reply> totalReplyList = new ArrayList<>();
+
+        for(Reply reply : replyList){
+            if (reply.getDepth() == 0){
+                parentReplyList.add(reply);
+            } else {
+                childReplyList.add(reply);
+            }
+        }
+
+        for (Reply parentReply : parentReplyList){
+            totalReplyList.add(parentReply);
+
+            for (Reply childReply : childReplyList){
+                if (parentReply.getId_reply() == childReply.getParent_id()){
+                    totalReplyList.add(childReply);
+                }
+            }
+        }
+
+        return totalReplyList;
+    }
+
+    @Override
     public void createReply(@AuthenticationPrincipal PrincipalDetails principalDetails, int postno, String content_reply) {
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         BoardMember member = boardMemberMapper.getById(principalDetails.getUsername());
@@ -61,5 +92,20 @@ public class BoardServiceImpl implements BoardService{
         Reply reply = boardReplyMapper.getById_reply(id_reply);
         reply.setContent_reply(content_reply);
         boardReplyMapper.updateReply(reply);
+    }
+
+    @Override
+    public void createReReply(PrincipalDetails principalDetails, int postno, int id_reply, String content_reply) {
+        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
+        BoardMember member = boardMemberMapper.getById(principalDetails.getUsername());
+
+        Reply reply = new Reply();
+        reply.setPostno(postno);
+        reply.setReg_date(new Timestamp(System.currentTimeMillis()));
+        reply.setId_member(member.getId());
+        reply.setContent_reply(content_reply);
+        reply.setParent_id(id_reply);
+        reply.setDepth(1);
+        boardReplyMapper.createReReply(reply);
     }
 }
