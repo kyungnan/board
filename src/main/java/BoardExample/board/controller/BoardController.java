@@ -2,11 +2,9 @@ package BoardExample.board.controller;
 
 import BoardExample.board.config.auth.PrincipalDetails;
 import BoardExample.board.domain.*;
-import BoardExample.board.mapper.BoardFileMapper;
-import BoardExample.board.mapper.BoardMapper;
-import BoardExample.board.mapper.BoardMemberMapper;
-import BoardExample.board.mapper.BoardReplyMapper;
+import BoardExample.board.mapper.*;
 import BoardExample.board.service.BoardFileService;
+import BoardExample.board.service.BoardLikeService;
 import BoardExample.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +35,8 @@ public class BoardController {
     private final BoardMemberMapper boardMemberMapper;
     private final BoardFileService boardFileService;
     private final BoardFileMapper boardFileMapper;
+    private final BoardLikeService boardLikeService;
+    private final BoardLikeMapper boardLikeMapper;
 
     // 게시글 전체 목록
     @GetMapping
@@ -68,6 +68,12 @@ public class BoardController {
                           Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
+        BoardMember sessionMember = boardMemberMapper.getById(principalDetails.getUsername());
+        model.addAttribute("sessionMember", sessionMember);
+        Like like = boardLikeMapper.getByPostnoAndMember(postno, sessionMember.getId());
+        model.addAttribute("like", like);
+        Integer likeCount = boardLikeMapper.LikeCountGetByPostno(postno);
+        model.addAttribute("likeCount", likeCount);
 
         List<File> fileList = boardFileMapper.getByPostno(postno);
         for (File file:fileList){
@@ -286,5 +292,13 @@ public class BoardController {
                 .contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
+    }
+
+    //좋아요 체크
+    @GetMapping("/{like_postno}/like/{like_member}")
+    public ResponseEntity<String> addLike(@PathVariable("like_postno") int like_postno, @PathVariable("like_member") int like_member){
+        log.info("#####" + like_postno + " // " + like_member);
+        boardLikeService.checkLike(like_postno, like_member);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

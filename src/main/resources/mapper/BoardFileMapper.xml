@@ -4,8 +4,8 @@
 
     <!-- 파일 등록(업로드) -->
     <insert id="uploadFile">
-        insert into attach_file(f_postno, file_origin_name, file_name, file_path, file_type, file_size, reg_date, delete_yn)
-        values(#{f_postno},#{file_origin_name},#{file_name},#{file_path},#{file_type},#{file_size},#{reg_date},#{delete_yn})
+        insert into attach_file(f_postno, file_origin_name, file_name, file_path, file_type, file_size, reg_date)
+        values(#{f_postno},#{file_origin_name},#{file_name},#{file_path},#{file_type},#{file_size},#{reg_date})
     </insert>
 
     <!-- 게시글에 첨부된 파일정보 조회 -->

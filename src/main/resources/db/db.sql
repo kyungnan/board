@@ -51,3 +51,20 @@ ALTER TABLE board_member ADD role varcher(50)
 ALTER TABLE `board_member`
 	ADD COLUMN `provider` VARCHAR(100) NULL DEFAULT NULL AFTER `role`,
 	ADD COLUMN `providerId` VARCHAR(100) NULL DEFAULT NULL AFTER `provider`;
+
+--likes 테이블 생성
+CREATE TABLE `likes` (
+	`like_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`like_postno` INT(11) NOT NULL,
+	`like_member` BIGINT(20) NOT NULL,
+	`reg_date` DATETIME NOT NULL,
+	`like_check` INT(11) NOT NULL,
+	PRIMARY KEY (`like_id`) USING BTREE,
+	INDEX `FK__board_like` (`like_postno`) USING BTREE,
+	INDEX `FK__board_member_like` (`like_member`) USING BTREE,
+	CONSTRAINT `FK__board_like` FOREIGN KEY (`like_postno`) REFERENCES `board_project`.`board` (`postno`) ON UPDATE RESTRICT ON DELETE CASCADE,
+	CONSTRAINT `FK__board_member_like` FOREIGN KEY (`like_member`) REFERENCES `board_project`.`board_member` (`id`) ON UPDATE RESTRICT ON DELETE CASCADE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+;

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardExample.board.mapper.BoardLikeMapper">
+
+    <!-- 특정 좋아요 조회 -->
+    <select id="getByPostnoAndMember" resultType="BoardExample.board.domain.Like">
+        select *
+        from likes
+        where like_postno = #{like_postno} and like_member = #{like_member}
+    </select>
+
+    <!-- 좋아요 갯수 -->
+    <select id="LikeCountGetByPostno" resultType="Integer">
+        select count(*)
+        from likes
+        where like_postno = #{like_postno} and like_check = 1
+    </select>
+
+    <!-- 좋아요 추가 -->
+    <insert id="addLike">
+        insert into likes(like_postno, like_member, reg_date, like_check)
+        values(#{like_postno},#{like_member},#{reg_date},#{like_check})
+    </insert>
+
+    <!-- 좋아요 체크 -->
+    <update id="checkLike">
+        update likes
+        set like_check = #{like_check}, reg_date = #{reg_date}
+        where like_postno = #{like_postno} and like_member = #{like_member}
+    </update>
+
+</mapper>

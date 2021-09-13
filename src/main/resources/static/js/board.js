@@ -9,9 +9,9 @@ $(function() {
         return replySave();
     });
 
-    let postno = $("#postno").val();
-    let page = $("#page").val();
-    let cntPerPage = $("#cntPerPage").val();
+    let postno = $(".postno").val();
+    let page = $(".page").val();
+    let cntPerPage = $(".cntPerPage").val();
 
     function replySave(){
         let data = {
@@ -38,8 +38,8 @@ function replyDelete(postno, id_reply){
     var del_confiem = confirm("삭제하시겠습니까?");
 
     if (del_confiem == true){
-        let page = $("#select_page").val();
-        let cntPerPage = $("#select_cntPerPage").val();
+        let page = $(".page").val();
+        let cntPerPage = $(".cntPerPage").val();
         $.ajax({
             type:"DELETE",
             url:`/board/${postno}/reply/${id_reply}`,
@@ -59,10 +59,10 @@ $(function() {
         return replyUpdate();
     });
 
-    let postno = $("#postno_update").val();
-    let page = $("#page_update").val();
-    let cntPerPage = $("#cntPerPage_update").val();
-    let id_reply = $("#id_reply_update").val();
+    let postno = $(".postno").val();
+    let page = $(".page").val();
+    let cntPerPage = $(".cntPerPage").val();
+    let id_reply = $(".id_reply").val();
 
     function replyUpdate(){
         let data = {
@@ -90,10 +90,10 @@ $(function() {
         return reReplySave();
     });
 
-    let postno = $("#postno_rereply").val();
-    let page = $("#page_rereply").val();
-    let cntPerPage = $("#cntPerPage_rereply").val();
-    let id_reply = $("#id_reply_rereply").val();
+    let postno = $(".postno").val();
+    let page = $(".page").val();
+    let cntPerPage = $(".cntPerPage").val();
+    let id_reply = $(".id_reply").val();
 
     function reReplySave(){
         let data = {
@@ -118,19 +118,33 @@ $(function() {
 <!-- 첨부파일 삭제 이벤트 -->
 function attachDelete(f_postno, f_id){
     var del_confiem = confirm("삭제하시겠습니까?");
-    if (del_confiem == true){
-        let page = $("#select_page_del").val();
-        let cntPerPage = $("#select_cntPerPage_del").val();
-        $.ajax({
-            type:"DELETE",
-            url:`/board/${f_postno}/attach/${f_id}`,
-            dataType:"text"
-        }).done(function(resp){
-            alert("첨부파일이 삭제되었습니다.");
-            type:"GET";
-            location.href=`/board/${f_postno}?page=${page}&cntPerPage=${cntPerPage}`;
-        }).fail(function(error){
-            alert(JSON.stringify(error));
-        });
-    }
+       if (del_confiem == true){
+           let page = $(".page").val();
+           let cntPerPage = $(".cntPerPage").val();
+           $.ajax({
+               type:"DELETE",
+               url:`/board/${f_postno}/attach/${f_id}`,
+               dataType:"text"
+           }).done(function(resp){
+               alert("첨부파일이 삭제되었습니다.");
+               type:"GET";
+               location.href=`/board/${f_postno}?page=${page}&cntPerPage=${cntPerPage}`;
+           }).fail(function(error){
+               alert(JSON.stringify(error));
+           });
+       }
+}
+
+<!-- 좋아요 기능 -->
+function like_func(like_postno, like_member, page, cntPerPage){
+
+    $.ajax({
+        type:"GET",
+        url:`/board/${like_postno}/like/${like_member}`
+    }).done(function(resp){
+        console.log('좋아요 클릭 성공!');
+        location.href=`/board/${like_postno}?page=${page}&cntPerPage=${cntPerPage}`;
+    }).fail(function(error){
+        alert(JSON.stringify(error));
+    });
 }
