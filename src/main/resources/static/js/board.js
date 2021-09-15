@@ -93,7 +93,7 @@ $(function() {
     let postno = $(".postno").val();
     let page = $(".page").val();
     let cntPerPage = $(".cntPerPage").val();
-    let id_reply = $(".id_reply").val();
+    let parent_id = $(".parent_id").val();
 
     function reReplySave(){
         let data = {
@@ -102,7 +102,7 @@ $(function() {
 
         $.ajax({
             type:"POST",
-            url:`/board/${postno}/${id_reply}`,
+            url:`/board/${postno}/${parent_id}`,
             data:data.content,
             contentType: "application/json; charset=utf-8;",
             dataType:"text"

@@ -64,7 +64,7 @@ public class BoardController {
     @GetMapping("/{postno}")
     public String content(@PathVariable int postno, @RequestParam("page") int page, @RequestParam("cntPerPage") int cntPerPage,
                           @RequestParam(value = "flag", required = false) String flag, @RequestParam(value = "flagReReply", required = false) String flagReReply,
-                          @RequestParam(value = "id_reply", required = false, defaultValue = "0") int id_reply,
+                          @RequestParam(value = "parent_id", required = false, defaultValue = "0") int parent_id,
                           Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
@@ -97,12 +97,13 @@ public class BoardController {
 
         if (flag != null){
             model.addAttribute("flag", flag);
-            model.addAttribute("id_reply", id_reply);
+            model.addAttribute("parent_id", parent_id);
         }
 
         if (flagReReply != null){
             model.addAttribute("flagReReply", true);
-            model.addAttribute("id_reply", id_reply);
+            model.addAttribute("parent_id", parent_id);
+            log.info("게시글 상세보기 컨트롤러의 parent_id: " +  parent_id);
         }
 
         return "board/content";
@@ -247,19 +248,19 @@ public class BoardController {
 
     // 대댓글 입력 폼
     @GetMapping("/{postno}/{id_reply}")
-    public String replyInsertForm(@PathVariable("postno") int postno, @PathVariable("id_reply") int id_reply,
+    public String replyInsertForm(@PathVariable("postno") int postno, @PathVariable("id_reply") int parent_id,
                                   @RequestParam("page") int page, @RequestParam("cntPerPage") int cntPerPage){
         log.info("답글버튼 클릭하여 답글 입력 폼 요청");
-        log.info("id_reply" + id_reply);
-        return "redirect:/board/{postno}" + "?id_reply=" + id_reply + "&flagReReply=true"
+        log.info("parent_id : " + parent_id);
+        return "redirect:/board/{postno}" + "?parent_id=" + parent_id + "&flagReReply=true"
                 + "&page=" + page + "&cntPerPage=" + cntPerPage;
     }
 
     // 대댓글 처리
-    @PostMapping("/{postno}/{id_reply}")
-    public ResponseEntity<String> re_replyCreate(@PathVariable("postno") int postno, @PathVariable("id_reply") int id_reply,@RequestBody String content_reply,
+    @PostMapping("/{postno}/{parent_id}")
+    public ResponseEntity<String> re_replyCreate(@PathVariable("postno") int postno, @PathVariable("parent_id") int parent_id,@RequestBody String content_reply,
                                               @AuthenticationPrincipal PrincipalDetails principalDetails){
-        boardService.createReReply(principalDetails, postno, id_reply, content_reply);
+        boardService.createReReply(principalDetails, postno, parent_id, content_reply);
         log.info("대댓글 등록 완료");
         return new ResponseEntity<>(HttpStatus.OK);
     }

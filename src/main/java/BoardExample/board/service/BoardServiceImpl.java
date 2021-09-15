@@ -95,7 +95,7 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void createReReply(PrincipalDetails principalDetails, int postno, int id_reply, String content_reply) {
+    public void createReReply(PrincipalDetails principalDetails, int postno, int parent_id, String content_reply) {
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         BoardMember member = boardMemberMapper.getById(principalDetails.getUsername());
 
@@ -104,7 +104,7 @@ public class BoardServiceImpl implements BoardService{
         reply.setReg_date(new Timestamp(System.currentTimeMillis()));
         reply.setId_member(member.getId());
         reply.setContent_reply(content_reply);
-        reply.setParent_id(id_reply);
+        reply.setParent_id(parent_id);
         reply.setDepth(1);
         boardReplyMapper.createReReply(reply);
     }

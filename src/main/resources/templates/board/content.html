@@ -172,12 +172,12 @@
                             </div>
 
                             <!-- 답글 입력 폼 -->
-                            <div th:if="${#strings.equals(flagReReply, 'true') && id_reply == reply.id_reply}">
+                            <div th:if="${#strings.equals(flagReReply, 'true') && parent_id == reply.id_reply}">
                                 <form>
                                     <input type="hidden" class="postno" th:value="${findPost.postno}">
                                     <input type="hidden" class="page" th:value="${pageMaker.criteria.page}">
                                     <input type="hidden" class="cntPerPage" th:value="${pageMaker.criteria.cntPerPage}">
-                                    <input type="hidden" class="id_reply" th:value="${reply.id_reply}">
+                                    <input type="hidden" class="parent_id" th:value="${parent_id}">
                                     <div class="card-body">
                                         <textarea id="content_reply_rereply" class="form-control" rows="1"></textarea>
                                     </div>
