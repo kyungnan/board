@@ -62,7 +62,7 @@ $(function() {
     let postno = $(".postno").val();
     let page = $(".page").val();
     let cntPerPage = $(".cntPerPage").val();
-    let id_reply = $(".id_reply").val();
+    let updateIdReply = $(".updateIdReply").val();
 
     function replyUpdate(){
         let data = {
@@ -71,7 +71,7 @@ $(function() {
 
         $.ajax({
             type:"PUT",
-            url:`/board/${postno}/reply/${id_reply}`,
+            url:`/board/${postno}/reply/${updateIdReply}`,
             data:data.content,
             contentType: "application/json; charset=utf-8;",
             dataType:"text"

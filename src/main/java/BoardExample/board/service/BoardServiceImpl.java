@@ -88,8 +88,8 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public void updateReply(int id_reply, int postno, String content_reply) {
-        Reply reply = boardReplyMapper.getById_reply(id_reply);
+    public void updateReply(int updateIdReply, int postno, String content_reply) {
+        Reply reply = boardReplyMapper.getById_reply(updateIdReply);
         reply.setContent_reply(content_reply);
         boardReplyMapper.updateReply(reply);
     }

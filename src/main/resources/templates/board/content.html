@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
@@ -128,12 +130,12 @@
                             <input type="hidden" class="cntPerPage" th:value="${pageMaker.criteria.cntPerPage}">
 
                             <!--댓글 수정 폼-->
-                            <div th:if="${#strings.equals(flag, 'true') && id_reply == reply.id_reply}">
+                            <div th:if="${#strings.equals(flag, 'true') && reply.id_reply == updateIdReply}">
                                 <form>
                                     <input type="hidden" class="postno" th:value="${findPost.postno}">
                                     <input type="hidden" class="page" th:value="${pageMaker.criteria.page}">
                                     <input type="hidden" class="cntPerPage" th:value="${pageMaker.criteria.cntPerPage}">
-                                    <input type="hidden" class="id_reply" th:value="${reply.id_reply}">
+                                    <input type="hidden" class="updateIdReply" th:value="${updateIdReply}">
                                     <div class="card-body">
                                         <textarea id="content_reply_update" class="form-control" rows="1">[[${reply.content_reply}]]</textarea>
                                     </div>
@@ -144,30 +146,43 @@
                             </div>
 
                             <!--댓글-->
-                            <div th:unless="${#strings.equals(flag, 'true') && id_reply == reply.id_reply}" class="d-flex justify-content-between">
+                            <div th:unless="${#strings.equals(flag, 'true') && reply.id_reply == updateIdReply}">
                                 <div th:if="${reply.depth == 0}">
                                     <div>
-                                        <label>작성자: <span th:text="${reply.name}"></span></label>
+                                        <i class="material-icons" style="font-size:36px;color:gray;">person</i>
+                                        <p th:text="${reply.name}" style="font-weight:600;"></p>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between">
                                         <div th:text="${reply.content_reply}"></div>
+                                        <div>
+                                            <button type="button" th:if="${reply.depth == 0}"
+                                                    th:onclick="|location.href='@{|/board/${reply.postno}/${reply.id_reply}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|">답글</button>
+                                            <span th:if="${nameUserDetails.equals(reply.name)}">
+                                                <button type="button" th:disabled="${!nameUserDetails.equals(reply.name)}"
+                                                th:onclick="|location.href='@{|/board/${reply.postno}/reply/${reply.id_reply}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|">수정</button>
+                                                 <button type="button" th:attr="onclick=|replyDelete('${reply.postno}', '${reply.id_reply}')|"
+                                                th:disabled="${!nameUserDetails.equals(reply.name)}">삭제</button>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <div th:unless="${reply.depth == 0}">
-                                    <div>
-                                        <label>┖> 작성자: <span th:text="${reply.name}"></span></label>
+                                    <label><i class="material-icons">&#xe5da;</i><span th:text="${reply.name}"></span></label>
+                                    <div class="d-flex justify-content-between">
                                         <div th:text="${reply.content_reply}"></div>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <button type="button" th:if="${reply.depth == 0}"
-                                            th:onclick="|location.href='@{|/board/${reply.postno}/${reply.id_reply}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|">답글</button>
-                                    <span th:if="${nameUserDetails.equals(reply.name)}">
+                                        <div>
+                                            <button type="button" th:if="${reply.depth == 0}"
+                                                    th:onclick="|location.href='@{|/board/${reply.postno}/${reply.id_reply}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|">답글</button>
+                                            <span th:if="${nameUserDetails.equals(reply.name)}">
                                         <button type="button" th:disabled="${!nameUserDetails.equals(reply.name)}"
                                                 th:onclick="|location.href='@{|/board/${reply.postno}/reply/${reply.id_reply}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|">수정</button>
                                         <button type="button" th:attr="onclick=|replyDelete('${reply.postno}', '${reply.id_reply}')|"
                                                 th:disabled="${!nameUserDetails.equals(reply.name)}">삭제</button>
                                     </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

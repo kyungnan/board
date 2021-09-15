@@ -17,7 +17,7 @@ public interface BoardService {
 
     void createReply(@AuthenticationPrincipal PrincipalDetails principalDetails, int postno, String content_reply);
 
-    void updateReply(int id_reply, int postno, String content_reply);
+    void updateReply(int updateIdReply, int postno, String content_reply);
 
     void createReReply(@AuthenticationPrincipal PrincipalDetails principalDetails, int postno, int parent_id, String content_reply);
 }
