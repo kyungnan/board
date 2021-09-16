@@ -19,7 +19,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
@@ -66,7 +68,9 @@ public class BoardController {
                           @RequestParam(value = "flag", required = false) String flag, @RequestParam(value = "flagReReply", required = false) String flagReReply,
                           @RequestParam(value = "updateIdReply", required = false, defaultValue = "0") int updateIdReply,
                           @RequestParam(value = "parent_id", required = false, defaultValue = "0") int parent_id,
+                          HttpServletRequest request, HttpServletResponse response,
                           Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        //model 속성
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
         BoardMember sessionMember = boardMemberMapper.getById(principalDetails.getUsername());
@@ -75,20 +79,49 @@ public class BoardController {
         model.addAttribute("like", like);
         Integer likeCount = boardLikeMapper.LikeCountGetByPostno(postno);
         model.addAttribute("likeCount", likeCount);
+        Board findPost = boardMapper.getByPostNo(postno);
+        model.addAttribute("findPost", findPost);
+        List<Reply> replyList = boardService.getReply(postno);
+        model.addAttribute("replyList", replyList);
 
+        //첨부파일 목록
         List<File> fileList = boardFileMapper.getByPostno(postno);
         for (File file:fileList){
             log.info(file.getFile_origin_name());
         };
         model.addAttribute("fileList", fileList);
 
-        Board findPost = boardMapper.getByPostNo(postno);
-        boardMapper.updateCount(postno);
-        model.addAttribute("findPost", findPost);
+        //조회수 중복방지
+        Cookie[] cookies = request.getCookies();
+        int visitor = 0;
+        String cookiePostNo = String.valueOf(postno);
 
-        List<Reply> replyList = boardService.getReply(postno);
-        model.addAttribute("replyList", replyList);
+        for (Cookie cookie : cookies) {
+            System.out.println(cookie.getName());
 
+            if (cookie.getName().equals("visit")) {
+                visitor = 1;
+
+                System.out.println("visit 통과");
+                if (cookie.getValue().contains(cookiePostNo)) {
+                    System.out.println("viditIf 통과");
+                } else {
+                    cookie.setValue(cookie.getValue() + "_" + postno);
+                    response.addCookie(cookie);
+                    boardMapper.updateCount(postno);
+                }
+            }
+        }
+
+        if (visitor == 0) {
+            Cookie newCookie = new Cookie("visit", cookiePostNo);
+            response.addCookie(newCookie);
+
+            boardMapper.updateCount(postno);
+        }
+
+        
+        //페이지 번호
         Criteria criteria = new Criteria();
         criteria.setPage(page);
         criteria.setCntPerPage(cntPerPage);
