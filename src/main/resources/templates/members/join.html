@@ -24,22 +24,24 @@
                     <h1 class="h3 mb-3 fw-normal">Please sign up</h1>
 
                     <div class="form-floating">
-                        <input type="text" name="username" class="form-control" id="username" placeholder="ID" required="required">
+                        <input type="text" name="username" class="form-control" id="username" placeholder="ID" required="required"  minlength="5" maxlength="20">
                         <label for="username">ID</label>
+                        <span th:text="${valid_username}"></span>
                     </div>
 
                     <div class="form-floating">
-                        <input type="password" name="password" class="form-control" id="password" placeholder="Password" required="required">
+                        <input type="password" name="password" class="form-control" id="password" placeholder="Password" required="required" minlength="8" maxlength="20">
                         <label for="password">Password</label>
+                        <span th:text="${valid_password}"></span>
                     </div>
 
                     <div class="form-floating">
-                        <input type="text" name="name" class="form-control" id="name" placeholder="Name" required="required">
+                        <input type="text" name="name" class="form-control" id="name" th:value="${valid_name}" placeholder="Name" required="required">
                         <label for="name">Name</label>
                     </div>
 
                     <div class="form-floating">
-                        <input type="text" name="email" class="form-control" id="email" placeholder="E-mail" required="required">
+                        <input type="text" name="email" class="form-control" id="email" th:value="${valid_email}" placeholder="E-mail" required="required">
                         <label for="email">E-mail</label>
                     </div>
 

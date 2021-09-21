@@ -45,6 +45,9 @@ dependencies {
 	// 스프링 OAuth2 client
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-oauth2-client'
 
+	// 유효성 검사
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	annotationProcessor 'org.projectlombok:lombok'
