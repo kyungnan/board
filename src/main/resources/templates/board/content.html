@@ -42,8 +42,8 @@
                                         <label><span th:text="${file.file_size}"></span> KB</label>
                                     </div>
                                     <form>
-                                        <input type="hidden" class="page" th:value="${pageMaker.criteria.page}">
-                                        <input type="hidden" class="cntPerPage" th:value="${pageMaker.criteria.cntPerPage}">
+                                        <input type="hidden" class="page" th:value="${criteria.page}">
+                                        <input type="hidden" class="cntPerPage" th:value="${criteria.cntPerPage}">
                                         <button type="button" th:if="${nameUserDetails.equals(findPost.writer)}"
                                                 th:attr="onclick=|attachDelete('${file.f_postno}', '${file.f_id}')|">파일삭제</button>
                                     </form>
@@ -58,7 +58,7 @@
                     <div>
                         <span class="row text-center" th:if="${like?.getLike_check == null || like?.getLike_check == 0}">
                             <a style="display:inline-block; width:36px; margin: 0 auto;"
-                                    th:onclick="|javascript:like_func('${findPost.postno}', '${sessionMember.id}', '${pageMaker.criteria.page}', '${pageMaker.criteria.cntPerPage}')|">
+                                    th:onclick="|javascript:like_func('${findPost.postno}', '${sessionMember.id}', '${criteria.page}', '${criteria.cntPerPage}')|">
                                 <i class='far fa-heart' style='font-size:24px;color:red'>
                                     <span th:if="${likeCount!=null}" th:text="${likeCount}" style="text-align:center; font-size:16px; color:black;"></span>
                                     <span th:unless="${likeCount!=null}" th:text="0" style="text-align:center; font-size:16px; color:black;"></span>
@@ -67,7 +67,7 @@
                         </span>
                         <span class="row text-center" th:if="${like?.getLike_check != null && like?.getLike_check == 1}">
                             <a style="display:inline-block; width:36px; margin: 0 auto;"
-                                    th:onclick="|javascript:like_func('${findPost.postno}', '${sessionMember.id}', '${pageMaker.criteria.page}', '${pageMaker.criteria.cntPerPage}')|">
+                                    th:onclick="|javascript:like_func('${findPost.postno}', '${sessionMember.id}', '${criteria.page}', '${criteria.cntPerPage}')|">
                                 <i class="fa fa-heart" style="font-size:24px;color:red">
                                     <span th:if="${likeCount!=null}" th:text="${likeCount}" style="text-align:center; font-size:16px; color:black;"></span>
                                     <span th:unless="${likeCount!=null}" th:text="0" style="text-align:center; font-size:16px; color:black;"></span>
@@ -81,15 +81,15 @@
             <tr>
                 <td colspan="3">
                     <input type="button" value="목록" class="btn btn-outline-dark"
-                           th:onclick="|location.href='@{|/board?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|"
+                           th:onclick="|location.href='@{|/board?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}'|"
                     >
 
                     <span th:if="${nameUserDetails.equals(findPost.writer)}">
                         <input type="button" value="수정" class="btn btn-outline-dark"
-                               th:onclick="|location.href='@{|/board/post/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|"
+                               th:onclick="|location.href='@{|/board/post/${findPost.postno}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}'|"
                         >
 
-                        <form th:action="@{|/board/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}" method="post" id="delete_btn">
+                        <form th:action="@{|/board/${findPost.postno}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}" method="post" id="delete_btn">
                             <input type="hidden" name="_method" value="delete">
                             <input type="submit" value="삭제" class="btn btn-outline-dark">
                         </form>
@@ -105,8 +105,8 @@
         <div class="card">
             <form>
                 <input type="hidden" class="postno" th:value="${findPost.postno}">
-                <input type="hidden" class="page" th:value="${pageMaker.criteria.page}">
-                <input type="hidden" class="cntPerPage" th:value="${pageMaker.criteria.cntPerPage}">
+                <input type="hidden" class="page" th:value="${criteria.page}">
+                <input type="hidden" class="cntPerPage" th:value="${criteria.cntPerPage}">
                 <div class="card-body">
                     <textarea id="content_reply" class="form-control" rows="1"></textarea>
                 </div>
@@ -126,16 +126,16 @@
                     <form>
                         <li class="list-group-item" th:each="reply:${replyList}">
                             <input type="hidden" class="id_reply" th:value="${reply.id_reply}">
-                            <input type="hidden" class="page" th:value="${pageMaker.criteria.page}">
-                            <input type="hidden" class="cntPerPage" th:value="${pageMaker.criteria.cntPerPage}">
+                            <input type="hidden" class="page" th:value="${criteria.page}">
+                            <input type="hidden" class="cntPerPage" th:value="${criteria.cntPerPage}">
 
                             <!--댓글 수정 폼-->
-                            <div th:if="${#strings.equals(flag, 'true') && reply.id_reply == updateIdReply}">
+                            <div th:if="${#strings.equals(boardDetailsVo.flag, 'true') && reply.id_reply == boardDetailsVo.updateIdReply}">
                                 <form>
                                     <input type="hidden" class="postno" th:value="${findPost.postno}">
-                                    <input type="hidden" class="page" th:value="${pageMaker.criteria.page}">
-                                    <input type="hidden" class="cntPerPage" th:value="${pageMaker.criteria.cntPerPage}">
-                                    <input type="hidden" class="updateIdReply" th:value="${updateIdReply}">
+                                    <input type="hidden" class="page" th:value="${criteria.page}">
+                                    <input type="hidden" class="cntPerPage" th:value="${criteria.cntPerPage}">
+                                    <input type="hidden" class="updateIdReply" th:value="${boardDetailsVo.updateIdReply}">
                                     <div class="card-body">
                                         <textarea id="content_reply_update" class="form-control" rows="1">[[${reply.content_reply}]]</textarea>
                                     </div>
@@ -146,7 +146,7 @@
                             </div>
 
                             <!--댓글-->
-                            <div th:unless="${#strings.equals(flag, 'true') && reply.id_reply == updateIdReply}">
+                            <div th:unless="${#strings.equals(boardDetailsVo.flag, 'true') && reply.id_reply == boardDetailsVo.updateIdReply}">
                                 <div th:if="${reply.depth == 0}">
                                     <div>
                                         <i class="material-icons" style="font-size:36px;color:gray;">person</i>
@@ -157,10 +157,10 @@
                                         <div th:text="${reply.content_reply}"></div>
                                         <div>
                                             <button type="button" th:if="${reply.depth == 0}"
-                                                    th:onclick="|location.href='@{|/board/${reply.postno}/${reply.id_reply}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|">답글</button>
+                                                    th:onclick="|location.href='@{|/board/${reply.postno}/${reply.id_reply}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}'|">답글</button>
                                             <span th:if="${nameUserDetails.equals(reply.name)}">
                                                 <button type="button" th:disabled="${!nameUserDetails.equals(reply.name)}"
-                                                th:onclick="|location.href='@{|/board/${reply.postno}/reply/${reply.id_reply}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|">수정</button>
+                                                th:onclick="|location.href='@{|/board/${reply.postno}/reply/${reply.id_reply}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}'|">수정</button>
                                                  <button type="button" th:attr="onclick=|replyDelete('${reply.postno}', '${reply.id_reply}')|"
                                                 th:disabled="${!nameUserDetails.equals(reply.name)}">삭제</button>
                                             </span>
@@ -174,10 +174,10 @@
                                         <div th:text="${reply.content_reply}"></div>
                                         <div>
                                             <button type="button" th:if="${reply.depth == 0}"
-                                                    th:onclick="|location.href='@{|/board/${reply.postno}/${reply.id_reply}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|">답글</button>
+                                                    th:onclick="|location.href='@{|/board/${reply.postno}/${reply.id_reply}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}'|">답글</button>
                                             <span th:if="${nameUserDetails.equals(reply.name)}">
                                         <button type="button" th:disabled="${!nameUserDetails.equals(reply.name)}"
-                                                th:onclick="|location.href='@{|/board/${reply.postno}/reply/${reply.id_reply}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|">수정</button>
+                                                th:onclick="|location.href='@{|/board/${reply.postno}/reply/${reply.id_reply}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}'|">수정</button>
                                         <button type="button" th:attr="onclick=|replyDelete('${reply.postno}', '${reply.id_reply}')|"
                                                 th:disabled="${!nameUserDetails.equals(reply.name)}">삭제</button>
                                     </span>
@@ -187,12 +187,12 @@
                             </div>
 
                             <!-- 답글 입력 폼 -->
-                            <div th:if="${#strings.equals(flagReReply, 'true') && parent_id == reply.id_reply}">
+                            <div th:if="${#strings.equals(boardDetailsVo.flagReReply, 'true') && boardDetailsVo.parent_id == reply.id_reply}">
                                 <form>
                                     <input type="hidden" class="postno" th:value="${findPost.postno}">
-                                    <input type="hidden" class="page" th:value="${pageMaker.criteria.page}">
-                                    <input type="hidden" class="cntPerPage" th:value="${pageMaker.criteria.cntPerPage}">
-                                    <input type="hidden" class="parent_id" th:value="${parent_id}">
+                                    <input type="hidden" class="page" th:value="${criteria.page}">
+                                    <input type="hidden" class="cntPerPage" th:value="${criteria.cntPerPage}">
+                                    <input type="hidden" class="parent_id" th:value="${boardDetailsVo.parent_id}">
                                     <div class="card-body">
                                         <textarea id="content_reply_rereply" class="form-control" rows="1"></textarea>
                                     </div>

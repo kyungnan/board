@@ -6,6 +6,9 @@ import BoardExample.board.mapper.*;
 import BoardExample.board.service.BoardFileService;
 import BoardExample.board.service.BoardLikeService;
 import BoardExample.board.service.BoardService;
+import BoardExample.board.utils.Criteria;
+import BoardExample.board.utils.PageMaker;
+import BoardExample.board.vo.BoardDetailsVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -64,30 +67,32 @@ public class BoardController {
 
     // 게시글 상세보기
     @GetMapping("/{postno}")
-    public String content(@PathVariable int postno, @RequestParam("page") int page, @RequestParam("cntPerPage") int cntPerPage,
-                          @RequestParam(value = "flag", required = false) String flag, @RequestParam(value = "flagReReply", required = false) String flagReReply,
-                          @RequestParam(value = "updateIdReply", required = false, defaultValue = "0") int updateIdReply,
-                          @RequestParam(value = "parent_id", required = false, defaultValue = "0") int parent_id,
+    public String content(@PathVariable int postno, BoardDetailsVo boardDetailsVo, Criteria criteria,
                           HttpServletRequest request, HttpServletResponse response,
                           Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
         //model 속성
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
+
         BoardMember sessionMember = boardMemberMapper.getById(principalDetails.getUsername());
         model.addAttribute("sessionMember", sessionMember);
+
         Like like = boardLikeMapper.getByPostnoAndMember(postno, sessionMember.getId());
         model.addAttribute("like", like);
+
         Integer likeCount = boardLikeMapper.LikeCountGetByPostno(postno);
         model.addAttribute("likeCount", likeCount);
+
         Board findPost = boardMapper.getByPostNo(postno);
         model.addAttribute("findPost", findPost);
+
         List<Reply> replyList = boardService.getReply(postno);
         model.addAttribute("replyList", replyList);
 
         //첨부파일 목록
         List<File> fileList = boardFileMapper.getByPostno(postno);
         for (File file:fileList){
-            log.info(file.getFile_origin_name());
+            log.debug(file.getFile_origin_name());
         };
         model.addAttribute("fileList", fileList);
 
@@ -120,35 +125,14 @@ public class BoardController {
             boardMapper.updateCount(postno);
         }
 
-        
-        //페이지 번호
-        Criteria criteria = new Criteria();
-        criteria.setPage(page);
-        criteria.setCntPerPage(cntPerPage);
-        PageMaker pageMaker = new PageMaker();
-        pageMaker.setCriteria(criteria);
-        model.addAttribute("pageMaker", pageMaker);
-
-        //댓글 수정
-        if (flag != null){
-            model.addAttribute("flag", flag);
-            model.addAttribute("updateIdReply", updateIdReply);
-            log.info("상세보기의 updateIdReply : " + updateIdReply);
-        }
-
-        //답글
-        if (flagReReply != null){
-            model.addAttribute("flagReReply", true);
-            model.addAttribute("parent_id", parent_id);
-            log.info("게시글 상세보기 컨트롤러의 parent_id: " +  parent_id);
-        }
-
         return "board/content";
     }
-    
+
     // 검색 게시글 조회
     @GetMapping("/search")
-    public String searchList(@RequestParam("searchWriter") String searchWriter, @ModelAttribute("criteria") Criteria criteria, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public String searchList(@RequestParam("searchWriter") String searchWriter,
+                             @ModelAttribute("criteria") Criteria criteria, Model model,
+                             @AuthenticationPrincipal PrincipalDetails principalDetails){
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
 
@@ -184,11 +168,11 @@ public class BoardController {
         if (!multipartFile.isEmpty()){
 
             if (multipartFiles.length == 1){
-                log.info("단일 파일 첨부");
+                log.debug("단일 파일 첨부");
                 boardFileService.uploadFile(insertPost, multipartFile);
             }
             else {
-                log.info("다중 파일 첨부");
+                log.debug("다중 파일 첨부");
                 boardFileService.uploadFiles(insertPost, multipartFiles);
             }
         }
@@ -198,7 +182,8 @@ public class BoardController {
 
     // 글 수정 폼
     @GetMapping("/post/{postno}")
-    public String modifyForm(@PathVariable int postno, @RequestParam int page, @RequestParam int cntPerPage, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
+    public String modifyForm(@PathVariable int postno, Criteria criteria, Model model,
+                             @AuthenticationPrincipal PrincipalDetails principalDetails){
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
 
@@ -208,19 +193,19 @@ public class BoardController {
         Board findPost = boardMapper.getByPostNo(postno);
         model.addAttribute("findPost",findPost);
 
-        Criteria criteria = new Criteria();
-        criteria.setPage(page);
-        criteria.setCntPerPage(cntPerPage);
-        PageMaker pageMaker = new PageMaker();
-        pageMaker.setCriteria(criteria);
-        model.addAttribute("pageMaker", pageMaker);
+//        Criteria criteria = new Criteria();
+//        criteria.setPage(page);
+//        criteria.setCntPerPage(cntPerPage);
+//        PageMaker pageMaker = new PageMaker();
+//        pageMaker.setCriteria(criteria);
+//        model.addAttribute("pageMaker", pageMaker);
 
         return "board/modify";
     }
 
     // 글 수정 처리
     @PutMapping("/{postno}")
-    public String modify(@PathVariable("postno") int postno, @RequestParam("page") int page, @RequestParam("cntPerPage") int cntPerPage,
+    public String modify(@PathVariable("postno") int postno, Criteria criteria,
                          @RequestParam(value = "file", required = false) MultipartFile multipartFile,
                          @RequestParam(value = "file", required = false) MultipartFile[] multipartFiles,
                          Board updatePost){
@@ -230,29 +215,29 @@ public class BoardController {
         if (!multipartFile.isEmpty()){
 
             if (multipartFiles.length == 1){
-                log.info("단일 파일 첨부");
+                log.debug("단일 파일 첨부");
                 boardFileService.uploadFile(post, multipartFile);
             }
             else {
-                log.info("다중 파일 첨부");
+                log.debug("다중 파일 첨부");
                 boardFileService.uploadFiles(post, multipartFiles);
             }
         }
-        return "redirect:/board" + "?page=" + page + "&cntPerPage=" + cntPerPage;
+        return "redirect:/board" + "?page=" + criteria.getPage() + "&cntPerPage=" + criteria.getCntPerPage();
     }
 
     // 글 삭제 처리
     @DeleteMapping("/{postno}")
-    public String delete(@PathVariable("postno") int postno, @RequestParam int page, @RequestParam int cntPerPage){
+    public String delete(@PathVariable("postno") int postno, Criteria criteria){
         boardMapper.deletePost(postno);
-        return "redirect:/board" + "?page=" + page + "&cntPerPage=" + cntPerPage;
+        return "redirect:/board" + "?page=" + criteria.getPage() + "&cntPerPage=" + criteria.getCntPerPage();
     }
 
     // 댓글 입력 처리
     @PostMapping("/{postno}/reply")
     public ResponseEntity<String> replySave(@PathVariable int postno, @RequestBody String content_reply, @AuthenticationPrincipal PrincipalDetails principalDetails){
         boardService.createReply(principalDetails, postno, content_reply);
-        log.info("댓글 등록 완료");
+        log.debug("댓글 등록 완료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -260,47 +245,47 @@ public class BoardController {
     @DeleteMapping("/{postno}/reply/{id_reply}")
     public ResponseEntity<String> replyDelete(@PathVariable("id_reply") int id_reply){
         boardReplyMapper.deleteReply(id_reply);
-        log.info("댓글 삭제 완료");
+        log.debug("댓글 삭제 완료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // 댓글 수정 폼
     @GetMapping("/{postno}/reply/{id_reply}")
     public String replyUpdateForm(@PathVariable("postno") int postno, @PathVariable("id_reply") int id_reply,
-                                  @RequestParam("page") int page, @RequestParam("cntPerPage") int cntPerPage){
-        log.info("수정버튼 클릭하여 댓글 수정 폼 요청");
-        log.info("id_reply" + id_reply);
+                                  Criteria criteria){
+        log.debug("수정버튼 클릭하여 댓글 수정 폼 요청");
+        log.debug("id_reply" + id_reply);
         return "redirect:/board/{postno}" + "?updateIdReply=" + id_reply + "&flag=true"
-                + "&page=" + page + "&cntPerPage=" + cntPerPage;
+                + "&page=" + criteria.getPage() + "&cntPerPage=" + criteria.getCntPerPage();
     }
 
     // 댓글 수정 처리
     @PutMapping("/{postno}/reply/{updateIdReply}")
     public ResponseEntity<String> replyUpdate(@PathVariable("postno") int postno, @PathVariable("updateIdReply") int updateIdReply,@RequestBody String content_reply,
                                               @AuthenticationPrincipal PrincipalDetails principalDetails){
-        log.info("수정댓글내용 > " + content_reply);
-        log.info("수정댓글번호 > " + updateIdReply);
+        log.debug("수정댓글내용 > " + content_reply);
+        log.debug("수정댓글번호 > " + updateIdReply);
         boardService.updateReply(updateIdReply, postno, content_reply);
-        log.info("댓글 수정 완료");
+        log.debug("댓글 수정 완료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // 대댓글 입력 폼
     @GetMapping("/{postno}/{id_reply}")
     public String replyInsertForm(@PathVariable("postno") int postno, @PathVariable("id_reply") int parent_id,
-                                  @RequestParam("page") int page, @RequestParam("cntPerPage") int cntPerPage){
-        log.info("답글버튼 클릭하여 답글 입력 폼 요청");
-        log.info("parent_id : " + parent_id);
+                                  Criteria criteria){
+        log.debug("답글버튼 클릭하여 답글 입력 폼 요청");
+        log.debug("parent_id : " + parent_id);
         return "redirect:/board/{postno}" + "?parent_id=" + parent_id + "&flagReReply=true"
-                + "&page=" + page + "&cntPerPage=" + cntPerPage;
+                + "&page=" + criteria.getPage() + "&cntPerPage=" + criteria.getCntPerPage();
     }
 
     // 대댓글 처리
     @PostMapping("/{postno}/{parent_id}")
     public ResponseEntity<String> re_replyCreate(@PathVariable("postno") int postno, @PathVariable("parent_id") int parent_id,@RequestBody String content_reply,
-                                              @AuthenticationPrincipal PrincipalDetails principalDetails){
+                                                 @AuthenticationPrincipal PrincipalDetails principalDetails){
         boardService.createReReply(principalDetails, postno, parent_id, content_reply);
-        log.info("대댓글 등록 완료");
+        log.debug("대댓글 등록 완료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -308,7 +293,7 @@ public class BoardController {
     @DeleteMapping("/{postno}/attach/{f_id}")
     public ResponseEntity<String> attachDelete(@PathVariable("f_id") int f_id){
         boardFileMapper.deleteFile(f_id);
-        log.info("첨부파일 삭제 완료");
+        log.debug("첨부파일 삭제 완료");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -321,7 +306,7 @@ public class BoardController {
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
-            log.info("Could not determine file type.");
+            log.debug("Could not determine file type.");
         }
 
         if(contentType == null) {
@@ -337,7 +322,7 @@ public class BoardController {
     //좋아요 체크
     @GetMapping("/{like_postno}/like/{like_member}")
     public ResponseEntity<String> addLike(@PathVariable("like_postno") int like_postno, @PathVariable("like_member") int like_member){
-        log.info("#####" + like_postno + " // " + like_member);
+        log.debug(like_postno + " // " + like_member);
         boardLikeService.checkLike(like_postno, like_member);
         return new ResponseEntity<>(HttpStatus.OK);
     }

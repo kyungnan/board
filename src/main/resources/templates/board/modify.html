@@ -14,7 +14,7 @@
 <div th:insert="header.html" id="header"></div>
 
 <div id="container">
-    <form th:action="@{|/board/${findPost.postno}?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}"
+    <form th:action="@{|/board/${findPost.postno}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}"
           method="post" enctype="multipart/form-data">
         <input type="hidden" name="_method" value="put">
         <div class="mb-3">
@@ -49,7 +49,7 @@
             <input type="submit" value="수정하기" class="btn btn-outline-dark">
             <input type="reset" value="다시쓰기" class="btn btn-outline-dark">
             <input type="button" value="목록가기" class="btn btn-outline-dark"
-                   th:onclick="|location.href='@{|/board?page=${pageMaker.criteria.page}&cntPerPage=${pageMaker.criteria.cntPerPage}|}'|"
+                   th:onclick="|location.href='@{|/board?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}'|"
             >
         </div>
     </form>
