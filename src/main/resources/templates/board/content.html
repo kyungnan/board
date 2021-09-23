@@ -38,7 +38,7 @@
                             <ul>
                                 <li id="attach_list" class="d-flex justify-content-between">
                                     <div>
-                                        <a th:href="@{|/board/downloadFile/${file.file_origin_name}|}"><span th:text="${file.file_origin_name}"></span></a>
+                                        <a th:href="@{|/board/downloadFile/${file.f_id}|}"><span th:text="${file.file_origin_name}"></span></a>
                                         <label><span th:text="${file.file_size}"></span> KB</label>
                                     </div>
                                     <form>

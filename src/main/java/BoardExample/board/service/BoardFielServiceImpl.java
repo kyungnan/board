@@ -6,6 +6,7 @@ import BoardExample.board.domain.File;
 import BoardExample.board.exception.FileDownloadException;
 import BoardExample.board.exception.FileUploadException;
 import BoardExample.board.mapper.BoardFileMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -27,6 +28,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class BoardFielServiceImpl implements BoardFileService{
 
     private final Path fileLocation;
@@ -62,6 +64,7 @@ public class BoardFielServiceImpl implements BoardFileService{
         File file = new File();
         file.setF_postno(post.getPostno());
         file.setFile_path(filePath);
+        log.info("파일경로: " + filePath);
         file.setFile_origin_name(fileName);
         file.setFile_name(UUID.randomUUID().toString()+"_"+fileName);
         file.setReg_date(new Timestamp(System.currentTimeMillis()));

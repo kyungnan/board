@@ -42,8 +42,7 @@
     <!-- 게시판 조회수 -->
     <update id="updateCount">
         update board
-        set count = count
-        + 1
+        set count = count + 1
         where postno=#{postno}
     </update>
 

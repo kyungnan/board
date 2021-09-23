@@ -15,6 +15,13 @@
         where f_postno=#{f_postno};
     </select>
 
+    <!-- 파일번호(PK)로 파일 조회 -->
+    <select id="getByFId" resultType="BoardExample.board.domain.File">
+        select *
+        from attach_file
+        where f_id=#{f_id}
+    </select>
+
     <!-- 게시글 수정 시 첨부파일 삭제 -->
     <delete id="deleteFile">
         DELETE FROM attach_file

@@ -11,6 +11,7 @@ import BoardExample.board.utils.PageMaker;
 import BoardExample.board.vo.BoardDetailsVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -58,11 +59,18 @@ public class BoardController {
         model.addAttribute("boardList", boardList);
 
         // 게시판 목록 하단 페이징 처리 기능
-        PageMaker pageMaker = new PageMaker();
-        pageMaker.setCriteria(criteria);
-        pageMaker.setTotalCnt(boardMapper.getTotalCnt());
+        PageMaker pageMaker = getPageMaker(criteria, boardMapper.getTotalCnt());
         model.addAttribute("pageMaker", pageMaker);
         return "/board/list";
+    }
+
+    //페이지 생성하는 메서드
+    @NotNull
+    private PageMaker getPageMaker(@ModelAttribute("criteria") Criteria criteria, int totalCnt) {
+        PageMaker pageMaker = new PageMaker();
+        pageMaker.setCriteria(criteria);
+        pageMaker.setTotalCnt(totalCnt);
+        return pageMaker;
     }
 
     // 게시글 상세보기
@@ -70,7 +78,7 @@ public class BoardController {
     public String content(@PathVariable int postno, BoardDetailsVo boardDetailsVo, Criteria criteria,
                           HttpServletRequest request, HttpServletResponse response,
                           Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        //model 속성
+        
         String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
         model.addAttribute("nameUserDetails", nameUserDetails);
 
@@ -96,7 +104,14 @@ public class BoardController {
         };
         model.addAttribute("fileList", fileList);
 
-        //조회수 중복방지
+        //조회수 중복 방지
+        avoidDuplicateCount(postno, request, response);
+
+        return "board/content";
+    }
+
+    // 조회수 중복방지 메서드 (Cookie 이용)
+    private void avoidDuplicateCount(int postno, HttpServletRequest request, HttpServletResponse response) {
         Cookie[] cookies = request.getCookies();
         int visitor = 0;
         String cookiePostNo = String.valueOf(postno);
@@ -124,29 +139,6 @@ public class BoardController {
 
             boardMapper.updateCount(postno);
         }
-
-        return "board/content";
-    }
-
-    // 검색 게시글 조회
-    @GetMapping("/search")
-    public String searchList(@RequestParam("searchWriter") String searchWriter,
-                             @ModelAttribute("criteria") Criteria criteria, Model model,
-                             @AuthenticationPrincipal PrincipalDetails principalDetails){
-        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
-        model.addAttribute("nameUserDetails", nameUserDetails);
-
-        // 리스트 조회
-        List<Board> boardList = boardMapper.searchWriter(searchWriter, criteria);
-        model.addAttribute("boardList", boardList);
-
-        // 게시판 목록 하단 페이징 처리 기능
-        PageMaker pageMaker = new PageMaker();
-        pageMaker.setCriteria(criteria);
-        pageMaker.setTotalCnt(boardMapper.searchCnt(searchWriter));
-        model.addAttribute("pageMaker", pageMaker);
-        model.addAttribute("searchWriter", searchWriter);
-        return "/board/searchList";
     }
 
     // 글 입력 폼
@@ -192,13 +184,6 @@ public class BoardController {
 
         Board findPost = boardMapper.getByPostNo(postno);
         model.addAttribute("findPost",findPost);
-
-//        Criteria criteria = new Criteria();
-//        criteria.setPage(page);
-//        criteria.setCntPerPage(cntPerPage);
-//        PageMaker pageMaker = new PageMaker();
-//        pageMaker.setCriteria(criteria);
-//        model.addAttribute("pageMaker", pageMaker);
 
         return "board/modify";
     }
@@ -298,9 +283,10 @@ public class BoardController {
     }
 
     // 첨부파일 다운로드
-    @GetMapping("/downloadFile/{fileName}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request){
-        Resource resource = boardFileService.downloadFile(fileName);
+    @GetMapping("/downloadFile/{f_id}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable int f_id, HttpServletRequest request){
+        File downloadedFile = boardFileMapper.getByFId(f_id);
+        Resource resource = boardFileService.downloadFile(downloadedFile.getFile_origin_name());
 
         String contentType = null;
         try {
