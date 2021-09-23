@@ -13,5 +13,7 @@ public interface BoardFileMapper {
 
     List<File> getByPostno(int postno);
 
+    File getByFId(int f_id);
+
     void deleteFile(int f_id);
 }
