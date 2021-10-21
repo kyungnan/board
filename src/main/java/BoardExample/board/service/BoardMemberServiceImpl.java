@@ -33,8 +33,15 @@ public class BoardMemberServiceImpl implements BoardMemberService {
         }
     }
 
+    @Override
+    public void update(BoardMember originMember, BoardMember updateMember) {
+        originMember.setName(updateMember.getName());
+        originMember.setEmail(updateMember.getEmail());
+        boardMemberMapper.updateMember(updateMember);
+    }
+
     private BoardMember getMemberById(String userName){
-        return boardMemberMapper.getById(userName);
+        return boardMemberMapper.getByUsername(userName);
     }
 
 }
