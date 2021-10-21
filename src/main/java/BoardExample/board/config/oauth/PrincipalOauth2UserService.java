@@ -59,7 +59,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String role = "ROLE_USER";
 
         //해당 ID로 회원가입이 되어있는지 확인
-        BoardMember member = boardMemberMapper.getById(username);   // google_sub
+        BoardMember member = boardMemberMapper.getByUsername(username);   // google_sub
         if(member == null){
             member = BoardMember.builder()
                     .username(username)

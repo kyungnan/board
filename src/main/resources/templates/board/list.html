@@ -27,24 +27,24 @@
         <table class="table">
             <thead class="table-light">
             <tr>
-                <th id="no" width="100px">번호</th>
-                <th id="subject">제목</th>
-                <th id="writer">작성자</th>
-                <th id="createDate">작성일</th>
-                <th id="cnt">조회수</th>
+                <th id="no" width="100px" style="text-align: center;">번호</th>
+                <th id="subject" style="text-align: center;">제목</th>
+                <th id="writer" style="text-align: center;">작성자</th>
+                <th id="createDate" style="text-align: center;">작성일</th>
+                <th id="cnt" style="text-align: center;">조회수</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="post : ${boardList}" border="1">
-                <td><span th:text="${post.postno}"></span></td>
-                <td>
+                <td style="text-align: center;"><span th:text="${post.postno}"></span></td>
+                <td style="text-align: center;">
                     <a th:href="@{|/board/${post.postno}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}">
                         <span th:text="${post.subject}" th:onclick="${post.count++}"></span>
                     </a>
                 </td>
-                <td><span th:text="${post.writer}"></span></td>
-                <td><span th:text="${#calendars.format(post.regdate, 'yyyy-MM-dd HH:mm')}"></span></td>
-                <td><span th:text="${post.count}"></span></td>
+                <td style="text-align: center;"><span th:text="${post.writer}"></span></td>
+                <td style="text-align: center;"><span th:text="${#calendars.format(post.regdate, 'yyyy-MM-dd HH:mm')}"></span></td>
+                <td style="text-align: center;"><span th:text="${post.count}"></span></td>
             </tr>
             </tbody>
         </table>

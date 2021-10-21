@@ -29,9 +29,9 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public void createPost(Board post, @AuthenticationPrincipal PrincipalDetails principalDetails) {
-        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
+        BoardMember member = boardMemberMapper.getByUsername(principalDetails.getUsername());
 
-        post.setWriter(nameUserDetails);
+        post.setWriter(member.getName());
         post.setRegdate(new Timestamp(System.currentTimeMillis()));
         post.setModidate(new Timestamp(System.currentTimeMillis()));
 
@@ -76,8 +76,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public void createReply(@AuthenticationPrincipal PrincipalDetails principalDetails, int postno, String content_reply) {
-        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
-        BoardMember member = boardMemberMapper.getById(principalDetails.getUsername());
+        BoardMember member = boardMemberMapper.getByUsername(principalDetails.getUsername());
 
         Reply reply = new Reply();
         reply.setPostno(postno);
@@ -96,8 +95,7 @@ public class BoardServiceImpl implements BoardService{
 
     @Override
     public void createReReply(PrincipalDetails principalDetails, int postno, int parent_id, String content_reply) {
-        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
-        BoardMember member = boardMemberMapper.getById(principalDetails.getUsername());
+        BoardMember member = boardMemberMapper.getByUsername(principalDetails.getUsername());
 
         Reply reply = new Reply();
         reply.setPostno(postno);

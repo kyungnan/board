@@ -1,6 +1,7 @@
 package BoardExample.board.controller;
 
 import BoardExample.board.config.auth.PrincipalDetails;
+import BoardExample.board.domain.BoardMember;
 import BoardExample.board.mapper.BoardMemberMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +19,8 @@ public class HomeController {
     @GetMapping("/")
     public String home(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model) {
         if (principalDetails != null){
-            String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
-            model.addAttribute("nameUserDetails", nameUserDetails);
+            BoardMember member = boardMemberMapper.getByUsername(principalDetails.getUsername());
+            model.addAttribute("member", member);
         }
         return "home";
     }

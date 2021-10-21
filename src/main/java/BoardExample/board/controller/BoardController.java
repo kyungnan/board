@@ -6,8 +6,6 @@ import BoardExample.board.mapper.*;
 import BoardExample.board.service.BoardFileService;
 import BoardExample.board.service.BoardLikeService;
 import BoardExample.board.service.BoardService;
-import BoardExample.board.utils.Criteria;
-import BoardExample.board.utils.PageMaker;
 import BoardExample.board.vo.BoardDetailsVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,8 +45,8 @@ public class BoardController {
     // 게시글 전체 목록
     @GetMapping
     public String list(@ModelAttribute("criteria") Criteria criteria, Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
-        model.addAttribute("nameUserDetails", nameUserDetails);
+        BoardMember member = boardMemberMapper.getByUsername(principalDetails.getUsername());
+        model.addAttribute("member", member);
 
         // 총 게시글 수
         int totalCnt = boardMapper.getTotalCnt();
@@ -78,14 +76,10 @@ public class BoardController {
     public String content(@PathVariable int postno, BoardDetailsVo boardDetailsVo, Criteria criteria,
                           HttpServletRequest request, HttpServletResponse response,
                           Model model, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        
-        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
-        model.addAttribute("nameUserDetails", nameUserDetails);
+        BoardMember member = boardMemberMapper.getByUsername(principalDetails.getUsername());
+        model.addAttribute("member", member);
 
-        BoardMember sessionMember = boardMemberMapper.getById(principalDetails.getUsername());
-        model.addAttribute("sessionMember", sessionMember);
-
-        Like like = boardLikeMapper.getByPostnoAndMember(postno, sessionMember.getId());
+        Like like = boardLikeMapper.getByPostnoAndMember(postno, member.getId());
         model.addAttribute("like", like);
 
         Integer likeCount = boardLikeMapper.LikeCountGetByPostno(postno);
@@ -144,8 +138,8 @@ public class BoardController {
     // 글 입력 폼
     @GetMapping("/post")
     public String postForm(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model){
-        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
-        model.addAttribute("nameUserDetails", nameUserDetails);
+        BoardMember member = boardMemberMapper.getByUsername(principalDetails.getUsername());
+        model.addAttribute("member", member);
         return "/board/post";
     }
 
@@ -176,8 +170,8 @@ public class BoardController {
     @GetMapping("/post/{postno}")
     public String modifyForm(@PathVariable int postno, Criteria criteria, Model model,
                              @AuthenticationPrincipal PrincipalDetails principalDetails){
-        String nameUserDetails = boardMemberMapper.getNameById(principalDetails.getUsername());
-        model.addAttribute("nameUserDetails", nameUserDetails);
+        BoardMember member = boardMemberMapper.getByUsername(principalDetails.getUsername());
+        model.addAttribute("member", member);
 
         List<File> fileList = boardFileMapper.getByPostno(postno);
         model.addAttribute("fileList", fileList);

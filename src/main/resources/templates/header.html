@@ -24,13 +24,17 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/board}">게시판</a>
                 </li>
+
+                <li class="nav-item" >
+                    <a class="nav-link" th:href="@{'/members/'+${member?.id}}" sec:authorize="isAuthenticated()">회원정보</a>
+                </li>
             </ul>
             <a class="btn btn-secondary my-2 my-sm-0" th:href="@{/members/login}"
                sec:authorize="!isAuthenticated()">로그인</a>
             <a class="btn btn-secondary my-2 my-sm-0" th:href="@{/members/join}"
                sec:authorize="!isAuthenticated()">회원가입</a>
             <form class="form-inline my-2 my-lg-0" th:action="@{/members/logout}" sec:authorize="isAuthenticated()" method="post">
-                <span class="text-white mx-3" th:text="${nameUserDetails}">사용자</span>
+                <span class="text-white mx-3" th:text="${member?.name}">사용자</span>
                 <button class="btn btn-secondary my-2 my-sm-0" type="submit">로그아웃</button>
             </form>
         </div>

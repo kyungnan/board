@@ -44,7 +44,7 @@
                                     <form>
                                         <input type="hidden" class="page" th:value="${criteria.page}">
                                         <input type="hidden" class="cntPerPage" th:value="${criteria.cntPerPage}">
-                                        <button type="button" th:if="${nameUserDetails.equals(findPost.writer)}"
+                                        <button type="button" th:if="${member?.name.equals(findPost.writer)}"
                                                 th:attr="onclick=|attachDelete('${file.f_postno}', '${file.f_id}')|">파일삭제</button>
                                     </form>
                                 </li>
@@ -58,7 +58,7 @@
                     <div>
                         <span class="row text-center" th:if="${like?.getLike_check == null || like?.getLike_check == 0}">
                             <a style="display:inline-block; width:36px; margin: 0 auto;"
-                                    th:onclick="|javascript:like_func('${findPost.postno}', '${sessionMember.id}', '${criteria.page}', '${criteria.cntPerPage}')|">
+                                    th:onclick="|javascript:like_func('${findPost.postno}', '${member.id}', '${criteria.page}', '${criteria.cntPerPage}')|">
                                 <i class='far fa-heart' style='font-size:24px;color:red'>
                                     <span th:if="${likeCount!=null}" th:text="${likeCount}" style="text-align:center; font-size:16px; color:black;"></span>
                                     <span th:unless="${likeCount!=null}" th:text="0" style="text-align:center; font-size:16px; color:black;"></span>
@@ -67,7 +67,7 @@
                         </span>
                         <span class="row text-center" th:if="${like?.getLike_check != null && like?.getLike_check == 1}">
                             <a style="display:inline-block; width:36px; margin: 0 auto;"
-                                    th:onclick="|javascript:like_func('${findPost.postno}', '${sessionMember.id}', '${criteria.page}', '${criteria.cntPerPage}')|">
+                                    th:onclick="|javascript:like_func('${findPost.postno}', '${member.id}', '${criteria.page}', '${criteria.cntPerPage}')|">
                                 <i class="fa fa-heart" style="font-size:24px;color:red">
                                     <span th:if="${likeCount!=null}" th:text="${likeCount}" style="text-align:center; font-size:16px; color:black;"></span>
                                     <span th:unless="${likeCount!=null}" th:text="0" style="text-align:center; font-size:16px; color:black;"></span>
@@ -84,7 +84,7 @@
                            th:onclick="|location.href='@{|/board?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}'|"
                     >
 
-                    <span th:if="${nameUserDetails.equals(findPost.writer)}">
+                    <span th:if="${member?.name.equals(findPost.writer)}">
                         <input type="button" value="수정" class="btn btn-outline-dark"
                                th:onclick="|location.href='@{|/board/post/${findPost.postno}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}'|"
                         >
@@ -158,11 +158,11 @@
                                         <div>
                                             <button type="button" th:if="${reply.depth == 0}"
                                                     th:onclick="|location.href='@{|/board/${reply.postno}/${reply.id_reply}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}'|">답글</button>
-                                            <span th:if="${nameUserDetails.equals(reply.name)}">
-                                                <button type="button" th:disabled="${!nameUserDetails.equals(reply.name)}"
+                                            <span th:if="${member?.name.equals(reply.name)}">
+                                                <button type="button" th:disabled="${!member?.name.equals(reply.name)}"
                                                 th:onclick="|location.href='@{|/board/${reply.postno}/reply/${reply.id_reply}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}'|">수정</button>
                                                  <button type="button" th:attr="onclick=|replyDelete('${reply.postno}', '${reply.id_reply}')|"
-                                                th:disabled="${!nameUserDetails.equals(reply.name)}">삭제</button>
+                                                th:disabled="${!member?.name.equals(reply.name)}">삭제</button>
                                             </span>
                                         </div>
                                     </div>
@@ -175,11 +175,11 @@
                                         <div>
                                             <button type="button" th:if="${reply.depth == 0}"
                                                     th:onclick="|location.href='@{|/board/${reply.postno}/${reply.id_reply}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}'|">답글</button>
-                                            <span th:if="${nameUserDetails.equals(reply.name)}">
-                                        <button type="button" th:disabled="${!nameUserDetails.equals(reply.name)}"
+                                            <span th:if="${member?.name.equals(reply.name)}">
+                                        <button type="button" th:disabled="${!member?.name.equals(reply.name)}"
                                                 th:onclick="|location.href='@{|/board/${reply.postno}/reply/${reply.id_reply}?page=${criteria.page}&cntPerPage=${criteria.cntPerPage}|}'|">수정</button>
                                         <button type="button" th:attr="onclick=|replyDelete('${reply.postno}', '${reply.id_reply}')|"
-                                                th:disabled="${!nameUserDetails.equals(reply.name)}">삭제</button>
+                                                th:disabled="${!member?.name.equals(reply.name)}">삭제</button>
                                     </span>
                                         </div>
                                     </div>

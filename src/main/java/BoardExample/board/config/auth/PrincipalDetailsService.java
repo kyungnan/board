@@ -17,7 +17,7 @@ public class PrincipalDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        BoardMember findMember = boardMemberMapper.getById(username);
+        BoardMember findMember = boardMemberMapper.getByUsername(username);
 
         if(findMember == null){
             throw new UsernameNotFoundException(username);
