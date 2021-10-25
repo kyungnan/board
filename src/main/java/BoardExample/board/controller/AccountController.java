@@ -1,24 +1,21 @@
 package BoardExample.board.controller;
 
-import BoardExample.board.config.auth.PrincipalDetails;
 import BoardExample.board.domain.BoardMember;
 import BoardExample.board.mapper.BoardMemberMapper;
 import BoardExample.board.service.BoardMemberService;
+import BoardExample.board.utils.ScriptUtils;
 import BoardExample.board.validation.JoinValidation;
-import BoardExample.board.validation.ParameterNullCheck;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.Nullable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.ObjectUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Controller
 @ControllerAdvice
@@ -63,10 +60,14 @@ public class AccountController {
     }
 
     @PutMapping("/{id}")
-    public String info(@PathVariable("id") int id, BoardMember updateMember){
+    public void info(@PathVariable("id") int id, BoardMember updateMember, HttpServletResponse response){
         BoardMember originMember = boardMemberMapper.getById(id);
         boardMemberService.update(originMember, updateMember);
-        return "redirect:/members/" + id;
-    }
 
+        try {
+            ScriptUtils.alertAndMovePage(response, "회원정보 수정이 완료되었습니다.", "/members/" + id);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
