@@ -16,11 +16,11 @@
 
     <div th:insert="header.html" id="header"></div>
 
-    <div id="container">
+    <div id="container" class="card">
         <!-- 게시글 상세보기 -->
-        <table class="table table-bordered border-primary">
+        <table class="table table-bordered border-secondary">
             <tr>
-                <td colspan="3"><div th:text="${findPost.subject}"></div></td>
+                <td colspan="3"><h5 th:text="${findPost.subject}"></h5></td>
             </tr>
 
             <tr>
